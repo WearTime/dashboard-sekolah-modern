@@ -1,0 +1,121 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  role      UserRole
+  createdAt DateTime @default(now())
+}
+
+enum UserRole {
+  ADMIN
+  TEACHER
+  PRINCIPAL
+}
+
+model DataSiswa {
+  nisn          String     @id
+  nama          String
+  kelas         KelasSiswa
+  jurusan       String
+  no_hp         String?
+  jenis_kelamin JK
+  tempat_lahir  String?
+  tanggal_lahir DateTime   @db.Date
+  alamat        String?
+  image         String?
+
+  @@map("data_siswa")
+}
+
+enum JK {
+  L
+  P
+}
+
+enum KelasSiswa {
+  X
+  XI
+  XII
+}
+
+model DataGuru {
+  nip                String              @id
+  nama               String
+  no_hp              String?
+  alamat             String?
+  jenis_kelamin      JK                  @default(L)
+  image              String?
+  guruandmapel       GuruAndMapel[]
+  status             Status              @default(Honorer)
+  golongan           String?
+  StructurOrganisasi StructurOrganisasi?
+
+  @@map("data_guru")
+}
+
+enum Status {
+  ASN
+  P3K
+  Honorer
+}
+
+model DataTU {
+  nip           String  @id
+  nama          String
+  no_hp         String?
+  alamat        String?
+  image         String?
+  jenis_kelamin JK      @default(L)
+
+  @@map("data_stafftu")
+}
+
+model Mapel {
+  kode_mapel   String         @id
+  nama_mapel   String
+  fase         String
+  tipe_mapel   FaseMapel      @default(Umum)
+  jurusan      String
+  guruandmapel GuruAndMapel[]
+
+  @@map("mapel")
+}
+
+enum FaseMapel {
+  Umum
+  Jurusan
+}
+
+model GuruAndMapel {
+  id         String   @id @default(uuid())
+  kode_mapel String
+  nip_guru   String
+  mapel      Mapel    @relation(fields: [kode_mapel], references: [kode_mapel], onDelete: Cascade)
+  guru       DataGuru @relation(fields: [nip_guru], references: [nip], onDelete: Cascade)
+
+  @@unique([kode_mapel, nip_guru])
+}
+
+model StructurOrganisasi {
+  nip     String   @unique
+  jabatan String
+  guru    DataGuru @relation(fields: [nip], references: [nip], onDelete: Cascade)
+
+  @@map("struktur_organisasi")
+}

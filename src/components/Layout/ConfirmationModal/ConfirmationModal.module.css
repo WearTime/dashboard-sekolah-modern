@@ -1,0 +1,80 @@
+.confirmationContent {
+  padding: 0;
+}
+
+.messageContainer {
+  padding: 0 0 24px 0;
+  font-size: 14px;
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+.messageContainer p {
+  margin: 0 0 12px 0;
+}
+
+.messageContainer p:last-child {
+  margin-bottom: 0;
+}
+
+.buttonContainer {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.btnCancel {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  background-color: #ffffff;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btnCancel:hover:not(:disabled) {
+  background-color: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.btnCancel:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btnConfirm {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #ffffff;
+}
+
+.btnConfirm:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.btnDanger {
+  background-color: #ef4444;
+}
+
+.btnDanger:hover:not(:disabled) {
+  background-color: #dc2626;
+}
+
+.btnPrimary {
+  background-color: #3b82f6;
+}
+
+.btnPrimary:hover:not(:disabled) {
+  background-color: #2563eb;
+}

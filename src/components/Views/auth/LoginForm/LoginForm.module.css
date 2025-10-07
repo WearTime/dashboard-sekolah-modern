@@ -1,0 +1,114 @@
+.formGroup {
+  margin-bottom: 25px;
+}
+
+.formLabel {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.inputGroupCustom {
+  position: relative;
+}
+
+.inputGroupCustom i {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+  font-size: 16px;
+  z-index: 2;
+}
+
+.formControlCustom {
+  width: 100%;
+  padding: 14px 15px 14px 45px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  background-color: #f8f9fa;
+  color: #1e8a98;
+}
+
+.formControlCustom:focus {
+  outline: none;
+  border-color: #26a7b8;
+  background-color: #fff;
+  box-shadow: 0 0 0 4px rgba(38, 167, 184, 0.1);
+}
+
+.formControlCustom:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.inputError {
+  border-color: #dc3545 !important;
+}
+
+.errorText {
+  color: #dc3545;
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+.rememberForgot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  font-size: 13px;
+}
+
+.rememberMe {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #666;
+  cursor: pointer;
+}
+
+.rememberMe input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #26a7b8;
+}
+
+.btnLogin {
+  width: 100%;
+  padding: 14px;
+  background-color: #26a7b8;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(38, 167, 184, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btnLogin:hover:not(:disabled) {
+  background-color: #1e8a98;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(38, 167, 184, 0.4);
+}
+
+.btnLogin:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btnLogin:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

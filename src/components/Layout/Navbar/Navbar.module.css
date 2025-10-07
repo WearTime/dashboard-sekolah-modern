@@ -1,0 +1,85 @@
+.topBar {
+  background-color: #fff;
+  padding: 15px 30px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.topBar h4 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.buttonLogin {
+  padding: 8px 20px;
+  border-radius: 5px;
+  background-color: #26a7b8;
+  border: 0;
+  outline: 0;
+  font-weight: 500;
+  font-family: var(--font-poppins);
+  cursor: pointer;
+}
+
+.buttonLogin:hover {
+  background-color: #25b9cc;
+}
+
+.userAvatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background-color: #bbb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 18px;
+}
+
+.userDetails h6 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.userDetails p {
+  margin: 0;
+  font-size: 12px;
+  color: #999;
+}
+
+@media (max-width: 768px) {
+  .topBar {
+    padding: 15px 20px;
+  }
+
+  .topBar h4 {
+    font-size: 20px;
+  }
+
+  .userDetails h6 {
+    font-size: 12px;
+  }
+
+  .userDetails p {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .userDetails {
+    display: none;
+  }
+}

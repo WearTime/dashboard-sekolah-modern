@@ -1,0 +1,137 @@
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 280px;
+  height: 100vh;
+  background-color: #fff;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+  z-index: 1000;
+  transition: transform 0.3s ease;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 0px;
+}
+
+.sidebar.collapsed {
+  transform: translateX(-280px);
+}
+
+.sidebarHeader {
+  padding: 20px;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sidebarLogo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sidebarLogo img {
+  width: 204px;
+  height: 44px;
+}
+
+.toggleBtn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #333;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #333;
+  display: none;
+}
+
+.sidebarMenu {
+  padding: 20px 0;
+}
+
+.menuSectionTitle {
+  padding: 10px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.menuItem {
+  padding: 12px 20px 12px 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #666;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  font-size: 14px;
+  margin: 0 20px;
+  border-radius: 8px;
+}
+
+.menuItem:hover {
+  background-color: #e6f7f9;
+  color: #26a7b8;
+}
+
+.menuItem.active {
+  background-color: #c4eef3;
+  color: #26a7b8;
+  font-weight: 600;
+  padding-left: 10px;
+  margin: 0 20px;
+  border-radius: 5px;
+}
+
+.menuItem i {
+  width: 20px;
+  text-align: center;
+  font-size: 16px;
+}
+
+.overlay {
+  display: none;
+}
+
+@media (max-width: 992px) {
+  .sidebar {
+    transform: translateX(-280px);
+  }
+
+  .sidebar.active {
+    transform: translateX(0);
+  }
+
+  .toggleBtn {
+    display: none !important;
+  }
+
+  .closeBtn {
+    display: block;
+  }
+
+  .overlay {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+  }
+}

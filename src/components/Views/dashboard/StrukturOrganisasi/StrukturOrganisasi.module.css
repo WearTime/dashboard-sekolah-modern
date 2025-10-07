@@ -1,0 +1,15 @@
+.wrapper {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  aspect-ratio: 1200 / 650;
+  background: transparent;
+}
+
+@media (max-width: 480px) {
+  .wrapper {
+    aspect-ratio: 16 / 9;
+    padding: 0 12px;
+  }
+}
