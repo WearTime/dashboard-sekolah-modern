@@ -1,36 +1,110 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎸 Dashboard Sekolah Modern ✨
 
-## Getting Started
+<div align="center">
 
-First, run the development server:
+![Kita Ikuyo](https://media1.tenor.com/m/BL3FST8k-48AAAAd/kita-ikuyo-ikuyo-kita.gif)
+
+*"Kalau kamu butuh bantuan dengan dashboard ini, aku pasti akan bantu! 💕"*
+
+**Dashboard sekolah yang cerah dan modern, seperti energi Kita-chan!**
+
+[![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-pink?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-FF69B4?style=for-the-badge&logo=react)](https://reactjs.org/)
+
+</div>
+
+---
+
+## 🌟 Tentang Project Ini
+
+Halo! Aku WearTime! 🎤 Project ini adalah dashboard sekolah modern yang dibuat dengan Next.js. Dashboard ini super user-friendly dan penuh warna.
+
+Project ini dibuat untuk membantu sekolah mengelola data dengan cara yang lebih modern dan menyenangkan. Kita bisa bikin semua orang senang dengan interface yang cantik!
+
+## ✨ Fitur Unggulan
+
+- 🎨 **Design Modern & Cantik** - Interface yang eye-catching seperti stage performance!
+- ⚡ **Super Cepat** - Dibangun dengan Next.js 15 untuk performa maksimal
+- 📱 **Responsive** - Bisa diakses dari HP, tablet, atau komputer
+- 🎯 **User Friendly** - Mudah digunakan bahkan untuk pemula sekalipun!
+- 🌈 **Colorful Dashboard** - Visualisasi data yang menarik dan mudah dipahami
+
+## 🎵 Tech Stack
+
+Project ini menggunakan teknologi terkini yang keren banget:
+
+- **Next.js 15** - Framework React yang powerful
+- **TypeScript** - Untuk code yang lebih aman dan terstruktur
+- **Poppins Font** - Font modern dari Vercel
+- **Prisma ORM** — Si penyihir data yang membuat akses database terasa simpel, cepat, dan aman
+  
+## 🚀 Cara Memulai
+
+Ayo kita mulai! Ikuti langkah-langkah ini dengan semangat! 💪
+
+### 1. Clone Repository
 
 ```bash
+git clone https://github.com/WearTime/dashboard-sekolah-modern.git
+cd dashboard-sekolah-modern
+```
+
+### 2. Install Dependencies
+
+Pilih package manager favoritmu:
+
+```bash
+# Menggunakan npm
+npm install
+
+# Atau menggunakan yarn
+yarn install
+
+# Atau menggunakan pnpm
+pnpm install
+
+# Atau menggunakan bun
+bun install
+```
+
+### 3. Jalankan Development Server
+
+```bash
+# Menggunakan npm
 npm run dev
-# or
+
+# Atau menggunakan yarn
 yarn dev
-# or
+
+# Atau menggunakan pnpm
 pnpm dev
-# or
+
+# Atau menggunakan bun
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 4. Buka di Browser
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Buka [http://localhost:3000](http://localhost:3000) dan lihat hasilnya! 🎉
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 💖 Special Thanks
 
-## Learn More
+Terima kasih sudah mengunjungi project ini! Ayo kita buat dashboard sekolah yang keren bareng-bareng! 
 
-To learn more about Next.js, take a look at the following resources:
+*"Yuk, kita buat sesuatu yang amazing bersama-sama!"* 🌟
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+<div align="center">
 
-## Deploy on Vercel
+**Made with 💗 by WearTime**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+🎸 **"Kalau kita berusaha bersama, pasti bisa!"** 🎸
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+  <p>
+    <a href="https://github.com/WearTime/dashboard-sekolah-modern">⭐ Star this project</a> |
+    <a href="https://github.com/WearTime/dashboard-sekolah-modern/issues">🐛 Report Bug</a> |
+    <a href="https://github.com/WearTime/dashboard-sekolah-modern/pulls">🔧 Request Feature</a>
+  </p>
+</div>
