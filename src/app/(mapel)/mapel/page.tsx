@@ -1,10 +1,10 @@
 import MainLayout from "WT/components/Layout/Main";
-import ListSiswaPage from "WT/components/Views/student/StudentsList";
+import ListMapelPage from "WT/components/Views/mapel/MapelsList";
 import { getCurrentUser } from "WT/lib/auth";
 
 export const metadata = {
-  title: "List Siswa - SMK N 4 Bandar Lampung",
-  description: "List Siswa sistem manajemen sekolah",
+  title: "List Mapel - SMK N 4 Bandar Lampung",
+  description: "List Mapel sistem manajemen sekolah",
 };
 
 export default async function DashboardPage() {
@@ -12,8 +12,8 @@ export default async function DashboardPage() {
 
   return (
     <>
-      <MainLayout pageTitle="List Siswa" user={user}>
-        <ListSiswaPage user={user} />
+      <MainLayout pageTitle="List Mapel" user={user}>
+        <ListMapelPage user={user} />
       </MainLayout>
     </>
   );

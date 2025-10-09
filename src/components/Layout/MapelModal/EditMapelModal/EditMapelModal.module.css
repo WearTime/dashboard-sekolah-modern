@@ -1,0 +1,549 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.required {
+  color: #ef4444;
+}
+
+.input,
+.select,
+.textarea {
+  padding: 0.625rem 0.875rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background-color: white;
+  color: black;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  color: black;
+}
+
+.input:disabled {
+  background-color: #f3f4f6;
+  cursor: not-allowed;
+  color: #6b7280;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+  margin-top: 0.5rem;
+}
+
+.btnCancel,
+.btnSubmit {
+  padding: 0.625rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btnCancel {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.btnCancel:hover:not(:disabled) {
+  background-color: #e5e7eb;
+}
+
+.btnSubmit {
+  background-color: #26a7b8;
+  color: white;
+}
+
+.btnSubmit:hover:not(:disabled) {
+  background-color: #26a7b8da;
+}
+
+.btnCancel:disabled,
+.btnSubmit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.imagePreviewContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.imagePreview {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid #e5e7eb;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.imageActions {
+  display: flex;
+  gap: 0.75rem;
+  width: 100%;
+  justify-content: center;
+}
+
+.btnChangeImage,
+.btnRemoveImage {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btnChangeImage {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.btnChangeImage:hover:not(:disabled) {
+  background-color: #2563eb;
+}
+
+.btnRemoveImage {
+  background-color: #ef4444;
+  color: white;
+}
+
+.btnRemoveImage:hover:not(:disabled) {
+  background-color: #dc2626;
+}
+
+.btnChangeImage:disabled,
+.btnRemoveImage:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.uploadPlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  background-color: #f9fafb;
+  border: 2px dashed #d1d5db;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.uploadPlaceholder:hover {
+  background-color: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.uploadPlaceholder i {
+  font-size: 3rem;
+  color: #9ca3af;
+  margin-bottom: 1rem;
+}
+
+.uploadPlaceholder p {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin: 0 0 0.5rem 0;
+}
+
+.uploadPlaceholder span {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.photoUpload {
+  border: 2px dashed #ddd;
+  border-radius: 8px;
+  padding: 30px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: #fafafa;
+  position: relative;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.photoUpload:hover {
+  border-color: #26a7b8;
+  background-color: #f5f5f5;
+}
+
+.photoUpload.active {
+  border-color: #26a7b8;
+  padding: 0;
+  min-height: auto;
+}
+
+.photoUploadIcon {
+  font-size: 48px;
+  color: #26a7b8;
+  margin-bottom: 15px;
+}
+
+.photoUploadText {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.photoUploadHint {
+  font-size: 13px;
+  color: #666;
+}
+
+.photoPreview {
+  width: 100%;
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.photoPreview img {
+  width: 100%;
+  height: auto;
+  max-height: 400px;
+  object-fit: contain;
+  display: block;
+  background-color: #f9f9f9;
+}
+
+.removePhotoBtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: rgba(244, 67, 54, 0.9);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.removePhotoBtn:hover {
+  background-color: rgba(244, 67, 54, 1);
+  transform: scale(1.1);
+}
+
+.removePhotoBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.changePhotoText {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 12px;
+  font-size: 14px;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.photoPreview:hover .changePhotoText {
+  opacity: 1;
+}
+
+.loadingMapel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 2rem;
+  color: #6c757d;
+}
+
+.noMapel {
+  text-align: center;
+  padding: 2rem;
+  color: #6c757d;
+  font-style: italic;
+}
+
+.multiSelectWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.multiSelectInput {
+  min-height: 42px;
+  padding: 8px 36px 8px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  position: relative;
+  transition: all 0.2s;
+}
+
+.multiSelectInput:hover {
+  border-color: #cbd5e1;
+}
+
+.multiSelectInput:focus-within {
+  border-color: #26a7b8;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.placeholder {
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.selectedTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  flex: 1;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  background: #eff6ff;
+  border: 1px solid #26a7b8;
+  border-radius: 6px;
+  font-size: 13px;
+  color: black;
+  max-width: 200px;
+}
+
+.tag span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tagRemove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border: none;
+  background: transparent;
+  color: #26a7b8;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 50%;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.tagRemove:hover {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.dropdownIcon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #64748b;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.multiSelectDropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  max-height: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdownSearch {
+  padding: 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 8px 12px;
+  background-color: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.searchInput:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.dropdownList {
+  overflow-y: auto;
+  max-height: 240px;
+  padding: 4px;
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.2s;
+  user-select: none;
+}
+
+.dropdownItem:hover {
+  background: #f8fafc;
+}
+
+.dropdownItem input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #3b82f6;
+}
+
+.dropdownItem span {
+  flex: 1;
+  font-size: 14px;
+  color: #334155;
+}
+
+.noResults {
+  padding: 20px;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.loadingMapel {
+  padding: 20px;
+  text-align: center;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.loadingMapel i {
+  margin-right: 8px;
+}
+
+@media (max-width: 768px) {
+  .tag {
+    max-width: 150px;
+  }
+
+  .multiSelectDropdown {
+    max-height: 250px;
+  }
+
+  .dropdownList {
+    max-height: 190px;
+  }
+}
+
+@media (max-width: 640px) {
+  .imagePreview {
+    width: 150px;
+    height: 150px;
+  }
+
+  .imageActions {
+    flex-direction: column;
+  }
+
+  .btnChangeImage,
+  .btnRemoveImage {
+    width: 100%;
+    justify-content: center;
+  }
+}
+@media (max-width: 768px) {
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+}

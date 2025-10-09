@@ -11,13 +11,6 @@ export interface Siswa {
   image: string | null;
 }
 
-export interface PaginationData {
-  totalPages: number;
-  total: number;
-  currentPage: number;
-  limit: number;
-}
-
 export interface FilterOptions {
   search: string;
   kelas: string;

@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { toast } from "react-toastify";
-import { Siswa, FilterOptions, PaginationData } from "WT/types/student";
+import { Siswa, FilterOptions } from "WT/types/student";
 import { useDebounce } from "WT/hooks/useDebounce";
+import { PaginationData } from "WT/types";
 
 interface UseStudentsReturn {
   students: Siswa[];

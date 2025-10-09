@@ -1,45 +1,45 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import styles from "./StudentAdd.module.css";
+import styles from "./TeacherAdd.module.css";
 import Button from "WT/components/Ui/Button";
 import { useUnsavedChanges } from "WT/hooks/useUnsavedChanges";
 import ConfirmationModal from "WT/components/Layout/ConfirmationModal";
+import { Mapel } from "WT/types/mapel";
+import { useTeachers } from "WT/hooks/useTeacher";
 
-interface StudentFormData {
-  nisn: string;
+interface TeacherFormData {
+  nip: string;
   nama: string;
-  kelas: string;
-  jurusan: string;
-  no_hp: string;
   jenis_kelamin: "L" | "P";
-  tempat_lahir: string;
-  tanggal_lahir: string;
+  no_hp: string;
   alamat: string;
+  status: "ASN" | "P3K" | "Honorer";
+  golongan: string;
   image?: string;
+  mapel_ids: string[];
 }
 
-const initialFormData: StudentFormData = {
-  nisn: "",
+const initialFormData: TeacherFormData = {
+  nip: "",
   nama: "",
-  kelas: "",
-  jurusan: "",
-  no_hp: "",
   jenis_kelamin: "L",
-  tempat_lahir: "",
-  tanggal_lahir: "",
+  no_hp: "",
   alamat: "",
+  status: "Honorer",
+  golongan: "",
+  mapel_ids: [],
 };
 
-export default function TambahSiswa() {
+export default function TambahGuru() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [photoPreview, setPhotoPreview] = useState<string>("");
   const [uploadedImagePath, setUploadedImagePath] = useState<string>("");
-  const [formData, setFormData] = useState<StudentFormData>(initialFormData);
+  const [formData, setFormData] = useState<TeacherFormData>(initialFormData);
   const [hasChanges, setHasChanges] = useState(false);
 
   const [showCancelModal, setShowCancelModal] = useState(false);
@@ -48,20 +48,63 @@ export default function TambahSiswa() {
     ((value: boolean) => void) | null
   >(null);
 
+  const { availableMapel, loadingMapel, fetchAvailableMapel } = useTeachers();
+  const [isMapelDropdownOpen, setIsMapelDropdownOpen] = useState(false);
+  const [mapelSearchTerm, setMapelSearchTerm] = useState("");
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const getGolonganOptions = () => {
+    if (formData.status === "ASN") {
+      const golongan = [];
+      const romawi = ["I", "II", "III", "IV"];
+      for (let i = 0; i < 4; i++) {
+        for (const j of ["a", "b", "c", "d"]) {
+          golongan.push(`${romawi[i]}/${j}`);
+        }
+      }
+      return golongan;
+    } else if (formData.status === "P3K") {
+      return Array.from({ length: 9 }, (_, i) => `${i + 1}`);
+    }
+    return [];
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsMapelDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    fetchAvailableMapel();
+  }, []);
+
   useEffect(() => {
     const isModified =
-      formData.nisn !== "" ||
+      formData.nip !== "" ||
       formData.nama !== "" ||
-      formData.kelas !== "" ||
-      formData.jurusan !== "" ||
       formData.no_hp !== "" ||
-      formData.tempat_lahir !== "" ||
-      formData.tanggal_lahir !== "" ||
       formData.alamat !== "" ||
+      formData.golongan !== "" ||
+      formData.mapel_ids.length > 0 ||
       uploadedImagePath !== "";
 
     setHasChanges(isModified);
   }, [formData, uploadedImagePath]);
+
+  useEffect(() => {
+    if (formData.status === "Honorer") {
+      setFormData((prev) => ({ ...prev, golongan: "" }));
+    }
+  }, [formData.status]);
 
   const handleNavigationPrompt = (): Promise<boolean> => {
     return new Promise((resolve) => {
@@ -74,7 +117,7 @@ export default function TambahSiswa() {
     setShowNavigateModal(false);
     if (uploadedImagePath) {
       try {
-        await fetch(`/api/upload/siswa?path=${uploadedImagePath}`, {
+        await fetch(`/api/upload/guru?path=${uploadedImagePath}`, {
           method: "DELETE",
         });
       } catch (error) {
@@ -109,6 +152,32 @@ export default function TambahSiswa() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleMapelToggle = (kode_mapel: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      mapel_ids: prev.mapel_ids.includes(kode_mapel)
+        ? prev.mapel_ids.filter((k) => k !== kode_mapel)
+        : [...prev.mapel_ids, kode_mapel],
+    }));
+  };
+
+  const handleRemoveMapel = (kode_mapel: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      mapel_ids: prev.mapel_ids.filter((k) => k !== kode_mapel),
+    }));
+  };
+
+  const filteredMapel = availableMapel.filter((mapel) =>
+    mapel.nama_mapel.toLowerCase().includes(mapelSearchTerm.toLowerCase())
+  );
+
+  const getSelectedMapelNames = () => {
+    return availableMapel
+      .filter((mapel) => formData.mapel_ids.includes(mapel.kode_mapel))
+      .map((mapel) => mapel.nama_mapel);
+  };
+
   const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -136,12 +205,12 @@ export default function TambahSiswa() {
     const uploadToast = toast.loading("Mengupload foto...");
 
     try {
-      const formData = new FormData();
-      formData.append("file", file);
+      const formDataUpload = new FormData();
+      formDataUpload.append("file", file);
 
-      const response = await fetch("/api/upload/siswa", {
+      const response = await fetch("/api/upload/guru", {
         method: "POST",
-        body: formData,
+        body: formDataUpload,
       });
 
       const result = await response.json();
@@ -182,7 +251,7 @@ export default function TambahSiswa() {
   const handleRemovePhoto = async () => {
     if (uploadedImagePath) {
       try {
-        await fetch(`/api/upload/siswa?path=${uploadedImagePath}`, {
+        await fetch(`/api/upload/guru?path=${uploadedImagePath}`, {
           method: "DELETE",
         });
       } catch (error) {
@@ -209,9 +278,11 @@ export default function TambahSiswa() {
       const submitData = {
         ...formData,
         image: uploadedImagePath || undefined,
+        golongan:
+          formData.status === "Honorer" ? null : formData.golongan || null,
       };
 
-      const response = await fetch("/api/siswa", {
+      const response = await fetch("/api/guru", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -222,11 +293,11 @@ export default function TambahSiswa() {
       const result = await response.json();
 
       if (result.success) {
-        toast.success("Data siswa berhasil disimpan!");
+        toast.success("Data guru berhasil disimpan!");
         setHasChanges(false);
-        router.push("/siswa");
+        router.push("/guru");
       } else {
-        toast.error(result.message || "Gagal menyimpan data siswa");
+        toast.error(result.message || "Gagal menyimpan data guru");
       }
     } catch (error) {
       console.error("Error:", error);
@@ -240,7 +311,7 @@ export default function TambahSiswa() {
     if (hasChanges) {
       setShowCancelModal(true);
     } else {
-      router.push("/siswa");
+      router.push("/guru");
     }
   };
 
@@ -248,7 +319,7 @@ export default function TambahSiswa() {
     setShowCancelModal(false);
     if (uploadedImagePath) {
       try {
-        await fetch(`/api/upload/siswa?path=${uploadedImagePath}`, {
+        await fetch(`/api/upload/guru?path=${uploadedImagePath}`, {
           method: "DELETE",
         });
       } catch (error) {
@@ -256,7 +327,7 @@ export default function TambahSiswa() {
       }
     }
     setHasChanges(false);
-    router.push("/siswa");
+    router.push("/guru");
   };
 
   const handleCancelModalClose = () => {
@@ -268,13 +339,13 @@ export default function TambahSiswa() {
       <div className={styles.contentArea}>
         <div className={styles.cardContainer}>
           <div className={styles.cardHeader}>
-            <h5 className={styles.cardTitle}>Form Tambah Siswa Baru</h5>
+            <h5 className={styles.cardTitle}>Form Tambah Guru Baru</h5>
             <a href="#" className={styles.importBtn}>
               <span>Import</span>
             </a>
           </div>
 
-          <form onSubmit={handleSubmit} className={styles.studentForm}>
+          <form onSubmit={handleSubmit} className={styles.teacherForm}>
             <div className={styles.formSection}>
               <div className={styles.sectionTitle}>Data Pribadi</div>
 
@@ -294,42 +365,15 @@ export default function TambahSiswa() {
                 </div>
                 <div className={styles.formGroup}>
                   <label>
-                    NISN<span className={styles.required}>*</span>
+                    NIP<span className={styles.required}>*</span>
                   </label>
                   <input
                     type="text"
-                    name="nisn"
-                    value={formData.nisn}
+                    name="nip"
+                    value={formData.nip}
                     onChange={handleInputChange}
-                    placeholder="Masukkan NISN"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className={styles.formRow}>
-                <div className={styles.formGroup}>
-                  <label>
-                    Tempat Lahir<span className={styles.required}>*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="tempat_lahir"
-                    value={formData.tempat_lahir}
-                    onChange={handleInputChange}
-                    placeholder="Masukkan tempat lahir"
-                    required
-                  />
-                </div>
-                <div className={styles.formGroup}>
-                  <label>
-                    Tanggal Lahir<span className={styles.required}>*</span>
-                  </label>
-                  <input
-                    type="date"
-                    name="tanggal_lahir"
-                    value={formData.tanggal_lahir}
-                    onChange={handleInputChange}
+                    placeholder="Masukkan NIP (18 digit)"
+                    maxLength={18}
                     required
                   />
                 </div>
@@ -371,43 +415,140 @@ export default function TambahSiswa() {
             </div>
 
             <div className={styles.formSection}>
-              <div className={styles.sectionTitle}>Data Akademik</div>
+              <div className={styles.sectionTitle}>Data Kepegawaian</div>
 
               <div className={styles.formRow}>
                 <div className={styles.formGroup}>
                   <label>
-                    Kelas<span className={styles.required}>*</span>
+                    Status Kepegawaian<span className={styles.required}>*</span>
                   </label>
                   <select
-                    name="kelas"
-                    value={formData.kelas}
+                    name="status"
+                    value={formData.status}
                     onChange={handleInputChange}
                     required
                   >
-                    <option value="">Pilih Kelas</option>
-                    <option value="X">X</option>
-                    <option value="XI">XI</option>
-                    <option value="XII">XII</option>
+                    <option value="ASN">ASN</option>
+                    <option value="P3K">P3K</option>
+                    <option value="Honorer">Honorer</option>
                   </select>
                 </div>
                 <div className={styles.formGroup}>
-                  <label>
-                    Jurusan<span className={styles.required}>*</span>
-                  </label>
-                  <select
-                    name="jurusan"
-                    value={formData.jurusan}
-                    onChange={handleInputChange}
-                    required
-                  >
-                    <option value="">Pilih Jurusan</option>
-                    <option value="PPLG">Rekayasa Perangkat Lunak</option>
-                    <option value="TKJT">Teknik Komputer dan Jaringan</option>
-                    <option value="DKV">Desain Komunikasi Visual</option>
-                    <option value="AKL">Akuntansi dan Keuangan Lembaga</option>
-                  </select>
+                  <label>Golongan</label>
+                  {formData.status === "Honorer" ? (
+                    <input
+                      type="text"
+                      disabled
+                      placeholder="Tidak ada golongan"
+                    />
+                  ) : (
+                    <select
+                      name="golongan"
+                      value={formData.golongan}
+                      onChange={handleInputChange}
+                    >
+                      <option value="">Pilih Golongan</option>
+                      {getGolonganOptions().map((gol) => (
+                        <option key={gol} value={gol}>
+                          {gol}
+                        </option>
+                      ))}
+                    </select>
+                  )}
                 </div>
               </div>
+            </div>
+
+            <div className={styles.formSection}>
+              <div className={styles.sectionTitle}>
+                Mata Pelajaran yang Diampu
+              </div>
+
+              {loadingMapel ? (
+                <div className={styles.loadingMapel}>
+                  <i className="fas fa-spinner fa-spin"></i> Memuat data
+                  mapel...
+                </div>
+              ) : (
+                <div className={styles.multiSelectWrapper} ref={dropdownRef}>
+                  <div
+                    className={styles.multiSelectInput}
+                    onClick={() => setIsMapelDropdownOpen(!isMapelDropdownOpen)}
+                  >
+                    {formData.mapel_ids.length === 0 ? (
+                      <span className={styles.placeholder}>
+                        Pilih mata pelajaran
+                      </span>
+                    ) : (
+                      <div className={styles.selectedTags}>
+                        {getSelectedMapelNames().map((name, idx) => (
+                          <span key={idx} className={styles.tag}>
+                            {name}
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleRemoveMapel(formData.mapel_ids[idx]);
+                              }}
+                              className={styles.tagRemove}
+                            >
+                              ×
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                    <i
+                      className={`fas fa-chevron-down ${styles.dropdownIcon}`}
+                    ></i>
+                  </div>
+
+                  {isMapelDropdownOpen && (
+                    <div className={styles.multiSelectDropdown}>
+                      <div className={styles.dropdownSearch}>
+                        <input
+                          type="text"
+                          placeholder="Cari mata pelajaran..."
+                          value={mapelSearchTerm}
+                          onChange={(e) => setMapelSearchTerm(e.target.value)}
+                          className={styles.searchInput}
+                          onClick={(e) => e.stopPropagation()}
+                        />
+                      </div>
+                      <div className={styles.dropdownList}>
+                        {filteredMapel.length === 0 ? (
+                          <div className={styles.noResults}>
+                            {mapelSearchTerm
+                              ? "Tidak ada hasil"
+                              : "Belum ada data mapel"}
+                          </div>
+                        ) : (
+                          filteredMapel.map((mapel) => (
+                            <label
+                              key={mapel.kode_mapel}
+                              className={styles.dropdownItem}
+                            >
+                              <input
+                                type="checkbox"
+                                checked={formData.mapel_ids.includes(
+                                  mapel.kode_mapel
+                                )}
+                                onChange={() =>
+                                  handleMapelToggle(mapel.kode_mapel)
+                                }
+                                className={styles.checkbox}
+                              />
+                              <span>
+                                {mapel.nama_mapel} - {mapel.tipe_mapel}
+                              </span>
+                            </label>
+                          ))
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             <div className={styles.formSection}>
@@ -415,38 +556,32 @@ export default function TambahSiswa() {
 
               <div className={styles.formRow}>
                 <div className={styles.formGroup}>
-                  <label>
-                    No. HP/WhatsApp<span className={styles.required}>*</span>
-                  </label>
+                  <label>No. HP/WhatsApp</label>
                   <input
                     type="tel"
                     name="no_hp"
                     value={formData.no_hp}
                     onChange={handleInputChange}
                     placeholder="Contoh: 081234567890"
-                    required
                   />
                 </div>
               </div>
 
               <div className={styles.formRow}>
                 <div className={`${styles.formGroup} ${styles.fullWidth}`}>
-                  <label>
-                    Alamat Lengkap<span className={styles.required}>*</span>
-                  </label>
+                  <label>Alamat Lengkap</label>
                   <textarea
                     name="alamat"
                     value={formData.alamat}
                     onChange={handleInputChange}
                     placeholder="Masukkan alamat lengkap"
-                    required
                   />
                 </div>
               </div>
             </div>
 
             <div className={styles.formSection}>
-              <div className={styles.sectionTitle}>Foto Siswa</div>
+              <div className={styles.sectionTitle}>Foto Guru</div>
 
               <div
                 className={`${styles.photoUpload} ${

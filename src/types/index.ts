@@ -19,3 +19,10 @@ export interface ApiResponse<T = any> {
   data?: T;
   error?: string;
 }
+
+export interface PaginationData {
+  totalPages: number;
+  total: number;
+  currentPage: number;
+  limit: number;
+}

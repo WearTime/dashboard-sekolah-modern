@@ -1,14 +1,14 @@
 "use client";
 
-import { FilterOptions } from "WT/types/student";
-import styles from "./StudentFilter.module.css";
+import styles from "./MapelFilter.module.css";
 import Button from "WT/components/Ui/Button";
+import { FilterOptionsMapel } from "WT/types/mapel";
 
 interface SearchFilterProps {
-  filters: FilterOptions;
+  filters: FilterOptionsMapel;
   showFilter: boolean;
   onSearchChange: (value: string) => void;
-  onFilterChange: (key: keyof FilterOptions, value: string) => void;
+  onFilterChange: (key: keyof FilterOptionsMapel, value: string) => void;
   onToggleFilter: () => void;
   onApplyFilter: () => void;
   onResetFilter: () => void;
@@ -32,7 +32,7 @@ const SearchFilter = ({
             type="text"
             value={filters.search}
             onChange={(e) => onSearchChange(e.target.value)}
-            placeholder="Cari nama siswa atau NISN..."
+            placeholder="Cari nama Mapel atau Kode Mapel..."
           />
           {filters.search && (
             <i
@@ -51,15 +51,14 @@ const SearchFilter = ({
         <div className={styles.filterPanel}>
           <div className={styles.filterRow}>
             <div className={styles.filterGroup}>
-              <label>Kelas</label>
+              <label>Tipe Mapel</label>
               <select
-                value={filters.kelas}
-                onChange={(e) => onFilterChange("kelas", e.target.value)}
+                value={filters.tipe_mapel}
+                onChange={(e) => onFilterChange("tipe_mapel", e.target.value)}
               >
-                <option value="">Semua Kelas</option>
-                <option value="X">X</option>
-                <option value="XI">XI</option>
-                <option value="XII">XII</option>
+                <option value="">Semua Tipe Mapel</option>
+                <option value="Umum">Umum</option>
+                <option value="Jurusan">Jurusan</option>
               </select>
             </div>
             <div className={styles.filterGroup}>

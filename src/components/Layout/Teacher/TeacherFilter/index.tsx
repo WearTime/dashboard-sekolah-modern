@@ -1,14 +1,14 @@
 "use client";
 
-import { FilterOptions } from "WT/types/student";
-import styles from "./StudentFilter.module.css";
+import styles from "./TeacherFilter.module.css";
 import Button from "WT/components/Ui/Button";
+import { FilterOptionsGuru } from "WT/types/teacher";
 
 interface SearchFilterProps {
-  filters: FilterOptions;
+  filters: FilterOptionsGuru;
   showFilter: boolean;
   onSearchChange: (value: string) => void;
-  onFilterChange: (key: keyof FilterOptions, value: string) => void;
+  onFilterChange: (key: keyof FilterOptionsGuru, value: string) => void;
   onToggleFilter: () => void;
   onApplyFilter: () => void;
   onResetFilter: () => void;
@@ -32,7 +32,7 @@ const SearchFilter = ({
             type="text"
             value={filters.search}
             onChange={(e) => onSearchChange(e.target.value)}
-            placeholder="Cari nama siswa atau NISN..."
+            placeholder="Cari nama siswa atau NIP..."
           />
           {filters.search && (
             <i
@@ -51,28 +51,28 @@ const SearchFilter = ({
         <div className={styles.filterPanel}>
           <div className={styles.filterRow}>
             <div className={styles.filterGroup}>
-              <label>Kelas</label>
+              <label>Jenis Kelamin</label>
               <select
-                value={filters.kelas}
-                onChange={(e) => onFilterChange("kelas", e.target.value)}
+                value={filters.jenis_kelamin}
+                onChange={(e) =>
+                  onFilterChange("jenis_kelamin", e.target.value)
+                }
               >
-                <option value="">Semua Kelas</option>
-                <option value="X">X</option>
-                <option value="XI">XI</option>
-                <option value="XII">XII</option>
+                <option value="">Semua Jenis Kelamin</option>
+                <option value="L">Laki Laki</option>
+                <option value="P">Perempuan</option>
               </select>
             </div>
             <div className={styles.filterGroup}>
-              <label>Jurusan</label>
+              <label>Status</label>
               <select
-                value={filters.jurusan}
-                onChange={(e) => onFilterChange("jurusan", e.target.value)}
+                value={filters.status}
+                onChange={(e) => onFilterChange("status", e.target.value)}
               >
-                <option value="">Semua Jurusan</option>
-                <option value="PPLG">PPLG</option>
-                <option value="TKJT">TKJT</option>
-                <option value="DKV">DKV</option>
-                <option value="AKL">Akuntansi</option>
+                <option value="">Semua Status</option>
+                <option value="Honorer">Honorer</option>
+                <option value="P3K">P3K</option>
+                <option value="ASN">ASN</option>
               </select>
             </div>
           </div>
