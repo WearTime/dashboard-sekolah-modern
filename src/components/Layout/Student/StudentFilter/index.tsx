@@ -51,6 +51,19 @@ const SearchFilter = ({
         <div className={styles.filterPanel}>
           <div className={styles.filterRow}>
             <div className={styles.filterGroup}>
+              <label>Jenis Kelamin</label>
+              <select
+                value={filters.jenis_kelamin}
+                onChange={(e) =>
+                  onFilterChange("jenis_kelamin", e.target.value)
+                }
+              >
+                <option value="">Semua Jenis Kelamin</option>
+                <option value="L">Laki Laki</option>
+                <option value="P">Perempuan</option>
+              </select>
+            </div>
+            <div className={styles.filterGroup}>
               <label>Kelas</label>
               <select
                 value={filters.kelas}

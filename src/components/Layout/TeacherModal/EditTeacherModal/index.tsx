@@ -15,24 +15,6 @@ interface EditTeacherModalProps {
   onSuccess: () => void;
 }
 
-interface Mapel {
-  kode_mapel: string;
-  nama_mapel: string;
-}
-
-interface GuruMapelRelation {
-  id: string;
-  kode_mapel: string;
-  nip_guru: string;
-  mapel: {
-    kode_mapel: string;
-    nama_mapel: string;
-    fase: string;
-    tipe_mapel: string;
-    jurusan: string;
-  };
-}
-
 const EditTeacherModal = ({
   isOpen,
   onClose,

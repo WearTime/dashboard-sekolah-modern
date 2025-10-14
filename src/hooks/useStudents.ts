@@ -38,6 +38,7 @@ export const useStudents = (): UseStudentsReturn => {
         page: currentPage.toString(),
         limit: itemsPerPage.toString(),
         ...(debouncedSearch && { search: debouncedSearch }),
+        ...(filters.jenis_kelamin && { jenis_kelamin: filters.jenis_kelamin }),
         ...(filters.kelas && { kelas: filters.kelas }),
         ...(filters.jurusan && { jurusan: filters.jurusan }),
       });
@@ -58,7 +59,13 @@ export const useStudents = (): UseStudentsReturn => {
     } finally {
       setLoading(false);
     }
-  }, [currentPage, debouncedSearch, filters.kelas, filters.jurusan]);
+  }, [
+    currentPage,
+    debouncedSearch,
+    filters.jenis_kelamin,
+    filters.kelas,
+    filters.jurusan,
+  ]);
 
   useEffect(() => {
     fetchStudents();

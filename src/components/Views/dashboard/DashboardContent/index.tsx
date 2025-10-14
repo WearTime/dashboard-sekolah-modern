@@ -1,11 +1,13 @@
 "use client";
 
+import DashboardCharts from "../DashboardCharts";
 import styles from "./dashboard.module.css";
 import DrillDownNav from "WT/components/Layout/DrillDownNav";
 
 const DashboardContent = () => {
   return (
     <>
+      <DashboardCharts />
       <div className={styles.visionMissionCard}>
         <div className={styles.vmRow}>
           <div className={styles.vmSection}>

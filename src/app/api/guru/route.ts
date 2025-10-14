@@ -10,6 +10,7 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get("search") || "";
     const status = searchParams.get("status") || "";
     const jenis_kelamin = searchParams.get("jenis_kelamin") || "";
+    const golongan = searchParams.get("golongan") || "";
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "10");
     const skip = (page - 1) * limit;
@@ -25,6 +26,12 @@ export async function GET(request: NextRequest) {
 
     if (status) {
       where.status = status;
+    }
+
+    console.log(searchParams);
+    if (golongan) {
+      where.golongan = golongan;
+      console.log(golongan);
     }
 
     if (jenis_kelamin) {

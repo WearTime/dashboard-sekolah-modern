@@ -159,10 +159,3 @@ const ListGuruPage = ({ user }: { user: SessionUser | undefined }) => {
 };
 
 export default ListGuruPage;
-
-//  ┌───────────────────────────────────
-//  │ Project : Rumah Sekolah Modern
-//  │ File    : TeacherList Index
-//  │ Author  : WearTIme
-//  │ © 2025 WearTIme
-//  └───────────────────────────────────

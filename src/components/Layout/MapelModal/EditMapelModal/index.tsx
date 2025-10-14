@@ -15,11 +15,6 @@ interface EditMapelModalProps {
   onSuccess: () => void;
 }
 
-interface Guru {
-  nip: string;
-  nama: string;
-}
-
 const EditMapelModal = ({
   isOpen,
   onClose,
@@ -29,7 +24,7 @@ const EditMapelModal = ({
   const [formData, setFormData] = useState({
     nama_mapel: "",
     fase: "",
-    tipe_mapel: "Umum" as "Umum" | "Jurusan",
+    tipe_mapel: "Umusm" as "Umum" | "Jurusan",
     jurusan: "",
   });
   const [loading, setLoading] = useState(false);

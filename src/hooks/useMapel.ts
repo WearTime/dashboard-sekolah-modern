@@ -1,11 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { toast } from "react-toastify";
-import {
-  Mapel,
-  FilterOptionsMapel,
-  MapelWithRelations,
-  MapelGuruRelation,
-} from "WT/types/mapel";
+import { Mapel, FilterOptionsMapel, MapelGuruRelation } from "WT/types/mapel";
 import { useDebounce } from "WT/hooks/useDebounce";
 import { PaginationData } from "WT/types";
 import { Guru } from "WT/types/teacher";

@@ -1,4 +1,11 @@
-export type DrillLevel = "main" | "gender" | "kelas" | "jurusan";
+export type DrillLevel =
+  | "main"
+  | "gender"
+  | "kelas"
+  | "jurusan"
+  | "status"
+  | "golongan"
+  | "tipe";
 
 export interface DrillState {
   level: DrillLevel;
@@ -6,8 +13,11 @@ export interface DrillState {
     gender?: "L" | "P";
     kelas?: "X" | "XI" | "XII";
     jurusan?: string;
+    status?: "ASN" | "P3K" | "Honorer";
+    golongan?: string;
+    tipe?: "Umum" | "Jurusan";
   };
-  entityType: "siswa" | "guru" | "stafftu" | null;
+  entityType: "siswa" | "guru" | "stafftu" | "mapel" | null;
 }
 
 export interface StatCardData {

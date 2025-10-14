@@ -73,7 +73,7 @@ export async function PUT(
     const body = await request.json();
     const { mapel_ids, ...guruData } = body;
 
-    const guru = await prisma.dataGuru.update({
+    await prisma.dataGuru.update({
       where: { nip: nip },
       data: {
         nama: guruData.nama,

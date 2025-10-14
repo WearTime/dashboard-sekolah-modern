@@ -10,6 +10,7 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get("search") || "";
     const kelas = searchParams.get("kelas") || "";
     const jurusan = searchParams.get("jurusan") || "";
+    const gender = searchParams.get("jenis_kelamin") || "";
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "10");
     const skip = (page - 1) * limit;
@@ -25,6 +26,10 @@ export async function GET(request: NextRequest) {
 
     if (kelas) {
       where.kelas = kelas;
+    }
+
+    if (gender) {
+      where.jenis_kelamin = gender;
     }
 
     if (jurusan) {
