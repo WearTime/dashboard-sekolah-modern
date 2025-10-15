@@ -1,11 +1,283 @@
-import { PrismaClient } from "@prisma/client";
+import {
+  Permission,
+  PermissionAction,
+  Prisma,
+  PrismaClient,
+  UserRole,
+} from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
+const jurusanList = [
+  "PPLG",
+  "AKL",
+  "TKJ",
+  "DKV",
+  "PHT",
+  "MPLB",
+  "PM",
+  "UPW",
+  "KULINER",
+  "BUSANA",
+];
+
+type PermissionConfig = {
+  resource: string;
+  actions: PermissionAction[];
+  prefix?: string;
+  descriptions?: Partial<Record<PermissionAction, string>>;
+};
+
+const generatePermissions = (config: PermissionConfig) => {
+  const { resource, actions, prefix, descriptions } = config;
+
+  const defaultDescriptions: Record<PermissionAction, string> = {
+    [PermissionAction.view]: `Lihat ${resource}`,
+    [PermissionAction.create]: `Create ${resource}`,
+    [PermissionAction.edit]: `Edit ${resource}`,
+    [PermissionAction.delete]: `Delete ${resource}`,
+    [PermissionAction.import]: `Import ${resource}`,
+    [PermissionAction.export]: `Export ${resource}`,
+  };
+
+  return actions.map((action) => ({
+    name: prefix ? `${prefix}.${action}` : `${resource}.${action}`,
+    description: defaultDescriptions[action] || descriptions?.[action],
+    resource,
+    action,
+  }));
+};
+
+const buildPermissionList = () => {
+  const CRUD = [
+    PermissionAction.view,
+    PermissionAction.create,
+    PermissionAction.edit,
+    PermissionAction.delete,
+  ];
+
+  const VIEW_ONLY = [PermissionAction.view];
+  const CUD = [
+    PermissionAction.create,
+    PermissionAction.edit,
+    PermissionAction.delete,
+    PermissionAction.export,
+    PermissionAction.import,
+  ];
+  const ALL = [
+    PermissionAction.view,
+    PermissionAction.create,
+    PermissionAction.edit,
+    PermissionAction.delete,
+    PermissionAction.import,
+    PermissionAction.export,
+  ];
+
+  const permissions = [
+    // ...generatePermissions({
+    //   resource: "struktur_organisasi",
+    //   actions: VIEW_ONLY,
+    //   prefix: "struktur-organisasi",
+    //   descriptions: {
+    //     [PermissionAction.view]: "Lihat Struktur Organisasi",
+    //   },
+    // }),
+
+    ...generatePermissions({
+      resource: "ekstrakulikuler",
+      actions: CUD,
+      prefix: "ekstrakulikuler",
+      descriptions: {
+        [PermissionAction.view]: "Lihat Ekstrakulikuler",
+        [PermissionAction.create]: "Create Ekstrakulikuler",
+        [PermissionAction.edit]: "Edit Ekstrakulikuler",
+        [PermissionAction.delete]: "Delete Ekstrakulikuler",
+      },
+    }),
+
+    ...generatePermissions({
+      resource: "prestasi_siswa",
+      actions: CUD,
+      prefix: "prestasi.siswa",
+      descriptions: {
+        [PermissionAction.view]: "Lihat Prestasi Siswa",
+      },
+    }),
+
+    ...generatePermissions({
+      resource: "prestasi_sekolah",
+      actions: CUD,
+      prefix: "prestasi.sekolah",
+      descriptions: {
+        [PermissionAction.view]: "Lihat Prestasi Sekolah",
+      },
+    }),
+
+    ...["provinsi", "nasional", "internasional"].flatMap((level) =>
+      generatePermissions({
+        resource: "prestasi_gtk",
+        actions: CUD,
+        prefix: `prestasi.gtk.${level}`,
+        descriptions: {
+          [PermissionAction.view]: `Lihat Prestasi GTK ${level}`,
+          [PermissionAction.create]: `Create Prestasi GTK ${level}`,
+          [PermissionAction.edit]: `Edit Prestasi GTK ${level}`,
+          [PermissionAction.delete]: `Delete Prestasi GTK ${level}`,
+        },
+      })
+    ),
+
+    ...generatePermissions({
+      resource: "kurikulum",
+      actions: CUD,
+      prefix: "program.kurikulum",
+      descriptions: {
+        [PermissionAction.view]: "Lihat Kurikulum",
+        [PermissionAction.create]: "Create Kurikulum",
+        [PermissionAction.edit]: "Edit Kurikulum",
+        [PermissionAction.delete]: "Delete Kurikulum",
+      },
+    }),
+
+    ...generatePermissions({
+      resource: "sarpras",
+      actions: CUD,
+      prefix: "program.sarpras",
+      descriptions: {
+        [PermissionAction.view]: "Lihat Sarpras",
+        [PermissionAction.create]: "Create Sarpras",
+        [PermissionAction.edit]: "Edit Sarpras",
+        [PermissionAction.delete]: "Delete Sarpras",
+      },
+    }),
+
+    ...generatePermissions({
+      resource: "program_siswa",
+      actions: CUD,
+      prefix: "program.siswa",
+      descriptions: {
+        [PermissionAction.view]: "Lihat Program Siswa",
+        [PermissionAction.create]: "Create Program Siswa",
+        [PermissionAction.edit]: "Edit Program Siswa",
+        [PermissionAction.delete]: "Delete Program Siswa",
+      },
+    }),
+
+    ...generatePermissions({
+      resource: "program_humas",
+      actions: CUD,
+      prefix: "program.humas",
+      descriptions: {
+        [PermissionAction.view]: "Lihat Humas",
+        [PermissionAction.create]: "Create Humas",
+        [PermissionAction.edit]: "Edit Humas",
+        [PermissionAction.delete]: "Delete Humas",
+      },
+    }),
+
+    ...generatePermissions({
+      resource: "siswa",
+      actions: CUD,
+      prefix: "siswa",
+      descriptions: {
+        [PermissionAction.view]: "Lihat List Siswa",
+        [PermissionAction.create]: "Tambah Siswa",
+        [PermissionAction.edit]: "Edit Siswa",
+        [PermissionAction.delete]: "Delete Siswa",
+      },
+    }),
+
+    ...generatePermissions({
+      resource: "guru",
+      actions: CUD,
+      prefix: "guru",
+      descriptions: {
+        [PermissionAction.view]: "Lihat List Guru",
+        [PermissionAction.create]: "Tambah Guru",
+        [PermissionAction.edit]: "Edit Guru",
+        [PermissionAction.delete]: "Delete Guru",
+      },
+    }),
+
+    ...generatePermissions({
+      resource: "mapel",
+      actions: CUD,
+      prefix: "mapel",
+      descriptions: {
+        [PermissionAction.view]: "Lihat List Mapel",
+        [PermissionAction.create]: "Tambah Mapel",
+        [PermissionAction.edit]: "Edit Mapel",
+        [PermissionAction.delete]: "Delete Mapel",
+      },
+    }),
+
+    ...generatePermissions({
+      resource: "user",
+      actions: CRUD,
+      prefix: "users",
+      descriptions: {
+        [PermissionAction.view]: "Lihat Users",
+        [PermissionAction.create]: "Buat User",
+        [PermissionAction.edit]: "Edit User",
+        [PermissionAction.delete]: "Hapus User",
+      },
+    }),
+
+    ...jurusanList.flatMap((jurusan) =>
+      generatePermissions({
+        resource: "jurusan",
+        actions: CUD,
+        prefix: `program.jurusan.${jurusan}`,
+        descriptions: {
+          [PermissionAction.view]: `View untuk jurusan ${jurusan}`,
+          [PermissionAction.create]: `Create untuk jurusan ${jurusan}`,
+          [PermissionAction.edit]: `Edit untuk jurusan ${jurusan}`,
+          [PermissionAction.delete]: `Delete untuk jurusan ${jurusan}`,
+        },
+      })
+    ),
+  ];
+
+  return permissions;
+};
+
+const expandPatterns = (patterns: string[], allNames: string[]): string[] => {
+  const out = new Set<string>();
+
+  for (const pat of patterns) {
+    if (pat === "*") {
+      allNames.forEach((n) => out.add(n));
+      continue;
+    }
+
+    if (pat.includes("*")) {
+      const regex = new RegExp("^" + pat.replace(/\*/g, ".*") + "$");
+      allNames.forEach((n) => {
+        if (regex.test(n)) out.add(n);
+      });
+    } else {
+      if (allNames.includes(pat)) out.add(pat);
+    }
+  }
+
+  return Array.from(out);
+};
+
 async function main() {
   console.log("Starting seed...");
 
+  await userSeed();
+  await siswaSeed();
+  await guruSeed();
+  await mapelSeed();
+  await guruAndMapelSeed();
+  await permissionsSeed();
+
+  console.log("🎉 Seed completed!");
+}
+
+const userSeed = async () => {
   const hashedPassword = await bcrypt.hash("admin123", 10);
 
   const admin = await prisma.user.upsert({
@@ -46,7 +318,9 @@ async function main() {
   });
 
   console.log("✅ Principal user created:", principal);
+};
 
+const siswaSeed = async () => {
   const siswa = await prisma.dataSiswa.upsert({
     where: { nisn: "01111111111" },
     update: {},
@@ -104,10 +378,10 @@ async function main() {
   console.log("✅ Siswa #3 created:", siswa3);
 
   const siswa4 = await prisma.dataSiswa.upsert({
-    where: { nisn: "0333333333" },
+    where: { nisn: "0444444444" },
     update: {},
     create: {
-      nisn: "0333333333",
+      nisn: "0444444444",
       nama: "Syafa Aulia",
       kelas: "XI",
       jurusan: "AKL",
@@ -119,8 +393,10 @@ async function main() {
       image: null,
     },
   });
-  console.log("✅ Siswa #4 created:", siswa3);
+  console.log("✅ Siswa #4 created:", siswa4);
+};
 
+const guruSeed = async () => {
   const guru1 = await prisma.dataGuru.upsert({
     where: { nip: "198501012010011001" },
     update: {},
@@ -200,7 +476,9 @@ async function main() {
     },
   });
   console.log("✅ Guru #5 created:", guru5);
+};
 
+const mapelSeed = async () => {
   const mapel1 = await prisma.mapel.upsert({
     where: { kode_mapel: "PPLG-001" },
     update: {},
@@ -278,7 +556,9 @@ async function main() {
     },
   });
   console.log("✅ Mapel #6 created:", mapel6);
+};
 
+const guruAndMapelSeed = async () => {
   const guruMapel1 = await prisma.guruAndMapel.upsert({
     where: {
       kode_mapel_nip_guru: {
@@ -383,21 +663,139 @@ async function main() {
     },
   });
   console.log("✅ GuruAndMapel #7 created:", guruMapel7);
+};
 
-  console.log("🎉 Seed completed!");
-  console.log("\n📊 Summary:");
-  console.log("- Users: 3 (Admin, Teacher, Principal)");
-  console.log("- Siswa: 4");
-  console.log("- Guru: 5 (4 with mapel, 1 without mapel)");
-  console.log("- Mapel: 6 (3 PPLG jurusan, 2 Umum, 1 PKK)");
-  console.log("- GuruAndMapel Relations: 7");
-  console.log("\n📝 Test Scenarios:");
-  console.log("✓ Guru dengan multiple mapel (Ahmad: 3 mapel)");
-  console.log(
-    "✓ Mapel dengan multiple guru (Basis Data: 2 guru, Web & Mobile: 2 guru)"
-  );
-  console.log("✓ Guru tanpa mapel (Dedi - demonstrating optional)");
-}
+const permissionsSeed = async () => {
+  console.log("🔐 Running permissionSeed...");
+
+  const permissionList = buildPermissionList();
+
+  const createManyPayload = permissionList.map((p) => ({
+    name: p.name,
+    description: p.description,
+    resource: p.resource,
+    action: p.action,
+  }));
+
+  try {
+    await prisma.permission.createMany({
+      data: createManyPayload,
+      skipDuplicates: true,
+    });
+    console.log(`✅ ${permissionList.length} permissions upserted.`);
+  } catch (error) {
+    console.error(
+      "❌ createMany permission failed, falling back to upsert per-item:",
+      error
+    );
+    for (const p of createManyPayload) {
+      await prisma.permission.upsert({
+        where: { name: p.name },
+        update: {},
+        create: p,
+      });
+    }
+    console.log("✅ fallback upsert-permission complete.");
+  }
+
+  const allPermissions: Permission[] = await prisma.permission.findMany();
+  const allNames: string[] = allPermissions.map((p) => p.name);
+
+  const permByName: Record<string, Permission> = allPermissions.reduce<
+    Record<string, Permission>
+  >((acc, p) => {
+    acc[p.name] = p;
+    return acc;
+  }, {});
+
+  const rolePatterns: Record<UserRole, string[]> = {
+    [UserRole.ADMIN]: ["*"],
+    [UserRole.PRINCIPAL]: [
+      "struktur-organisasi.view",
+      "ekstrakulikuler.view",
+      "prestasi.siswa.view",
+      "prestasi.sekolah.view",
+      "prestasi.gtk.*.view",
+      "program.kurikulum.view",
+      "program.sarpras.view",
+      "program.siswa.view",
+      "program.humas.view",
+      "program.jurusan.*.view",
+      "program.jurusan.*.edit",
+      "siswa.*",
+      "guru.*",
+      "mapel.*",
+      "users.*",
+    ],
+    [UserRole.TEACHER]: [
+      "ekstrakulikuler.view",
+      "prestasi.siswa.view",
+      "prestasi.gtk.*.view",
+      "program.kurikulum.view",
+      "program.siswa.view",
+      "program.jurusan.*.view",
+    ],
+  };
+
+  const rolePermissionsData: Prisma.RolePermissionsCreateManyInput[] = [];
+
+  const entries = Object.entries(rolePatterns) as [UserRole, string[]][];
+  for (const [role, patterns] of entries) {
+    const expanded: string[] = expandPatterns(patterns, allNames);
+    for (const name of expanded) {
+      const perm = permByName[name];
+      if (perm) {
+        rolePermissionsData.push({
+          role,
+          permissionId: perm.id,
+        });
+      } else {
+        console.warn(
+          `⚠️ Role mapping references permission not found: ${name}`
+        );
+      }
+    }
+  }
+
+  if (rolePermissionsData.length > 0) {
+    await prisma.rolePermissions.createMany({
+      data: rolePermissionsData,
+      skipDuplicates: true,
+    });
+    console.log(
+      `🔁 RolePermissions populated (${rolePermissionsData.length} entries, skipDuplicates).`
+    );
+  } else {
+    console.warn(
+      "⚠️ No RolePermissions to create (rolePermissionsData empty)."
+    );
+  }
+
+  const admin = await prisma.user.findUnique({
+    where: { email: "admin@smkn4bdl.sch.id" },
+  });
+
+  if (admin) {
+    const userPermData = allPermissions.map((p) => ({
+      userId: admin.id,
+      permissionId: p.id,
+    }));
+
+    if (userPermData.length > 0) {
+      await prisma.userPermissions.createMany({
+        data: userPermData,
+        skipDuplicates: true,
+      });
+      console.log(`👑 All permissions assigned to Admin (${admin.email}).`);
+    }
+  } else {
+    console.warn(
+      "⚠️ Admin user not found — ensure userSeed ran before permissionSeed."
+    );
+  }
+
+  console.log("✅ permissionSeed finished.");
+};
 
 main()
   .catch((e) => {

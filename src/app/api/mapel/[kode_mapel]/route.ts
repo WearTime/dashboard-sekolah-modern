@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { getCurrentUser } from "WT/lib/auth";
+import { hasPermission } from "WT/lib/permissions";
 
 const prisma = new PrismaClient();
 
@@ -53,6 +54,18 @@ export async function PUT(
         message: "Unauthorized",
       },
       { status: 401 }
+    );
+  }
+
+  const userPermis = await hasPermission(user.id, "mapel.edit");
+
+  if (!userPermis) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Forbidden",
+      },
+      { status: 403 }
     );
   }
 
@@ -137,6 +150,18 @@ export async function DELETE(
         message: "Unauthorized",
       },
       { status: 401 }
+    );
+  }
+
+  const userPermis = await hasPermission(user.id, "mapel.delete");
+
+  if (!userPermis) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Forbidden",
+      },
+      { status: 403 }
     );
   }
 

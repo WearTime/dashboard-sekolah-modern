@@ -81,6 +81,7 @@
   font-size: 14px;
   margin: 0 20px;
   border-radius: 8px;
+  position: relative;
 }
 
 .menuItem:hover {
@@ -101,6 +102,70 @@
   width: 20px;
   text-align: center;
   font-size: 16px;
+}
+
+.chevronIcon {
+  margin-left: auto;
+  font-size: 12px;
+  transition: transform 0.3s ease;
+}
+
+.chevronIcon.rotated {
+  transform: rotate(180deg);
+}
+
+.subMenu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  margin-left: 20px;
+}
+
+.subMenu.open {
+  max-height: 500px;
+}
+
+.subMenuItem {
+  padding: 10px 20px 10px 42px;
+  display: flex;
+  align-items: center;
+  color: #666;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  font-size: 13px;
+  margin: 0 20px 0 0;
+  border-radius: 8px;
+  position: relative;
+}
+
+.subMenuItem::before {
+  content: "";
+  position: absolute;
+  left: 20px;
+  width: 6px;
+  height: 6px;
+  background-color: #999;
+  border-radius: 50%;
+}
+
+.subMenuItem:hover {
+  background-color: #e6f7f9;
+  color: #26a7b8;
+}
+
+.subMenuItem:hover::before {
+  background-color: #26a7b8;
+}
+
+.subMenuItem.activeSubItem {
+  background-color: #c4eef3;
+  color: #26a7b8;
+  font-weight: 600;
+}
+
+.subMenuItem.activeSubItem::before {
+  background-color: #26a7b8;
 }
 
 .overlay {

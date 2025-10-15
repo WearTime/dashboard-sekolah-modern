@@ -20,6 +20,8 @@ model User {
   password  String
   role      UserRole
   createdAt DateTime @default(now())
+
+  userPermissions UserPermissions[]
 }
 
 enum UserRole {
@@ -118,4 +120,57 @@ model StructurOrganisasi {
   guru    DataGuru @relation(fields: [nip], references: [nip], onDelete: Cascade)
 
   @@map("struktur_organisasi")
+}
+
+model Ekstrakulikuler {
+  id              String @id @default(uuid())
+  namaEskul       String
+  pendamping      String
+  ketua           String
+  description     String @db.LongText
+  imagesThumbnail String
+
+  @@map("ekstrakulikuler")
+}
+
+model Permission {
+  id              String            @id @default(uuid())
+  name            String            @unique
+  description     String?
+  resource        String
+  action          PermissionAction
+  createdAt       DateTime          @default(now())
+  UserPermissions UserPermissions[]
+  RolePermissions RolePermissions[]
+
+  @@map("permission")
+}
+
+enum PermissionAction {
+  view
+  create
+  edit
+  delete
+  export
+  import
+}
+
+model UserPermissions {
+  id           String     @id @default(uuid())
+  userId       Int
+  permissionId String
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+
+  @@unique([userId, permissionId])
+}
+
+model RolePermissions {
+  id           String     @id @default(uuid())
+  role         UserRole
+  permissionId String
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@unique([role, permissionId])
 }

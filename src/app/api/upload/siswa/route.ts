@@ -5,6 +5,7 @@ import { unlink } from "fs/promises";
 import path from "path";
 import crypto from "crypto";
 import { getCurrentUser } from "WT/lib/auth";
+import { hasPermission } from "WT/lib/permissions";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 const MAX_FILE_SIZE = 1 * 1024 * 1024; // 1MB
@@ -16,6 +17,18 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { success: false, message: "Unauthorized" },
         { status: 401 }
+      );
+    }
+
+    const userPermis = await hasPermission(user.id, "siswa.create");
+
+    if (!userPermis) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Forbidden",
+        },
+        { status: 403 }
       );
     }
 
@@ -98,6 +111,18 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json(
         { success: false, message: "Unauthorized" },
         { status: 401 }
+      );
+    }
+
+    const userPermis = await hasPermission(user.id, "siswa.delete");
+
+    if (!userPermis) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Forbidden",
+        },
+        { status: 403 }
       );
     }
 

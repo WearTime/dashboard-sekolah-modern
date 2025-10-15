@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { getCurrentUser } from "WT/lib/auth";
+import { hasPermission } from "WT/lib/permissions";
 
 const prisma = new PrismaClient();
 
@@ -77,6 +78,18 @@ export async function POST(request: NextRequest) {
         message: "Unauthorized",
       },
       { status: 401 }
+    );
+  }
+
+  const userPermis = await hasPermission(user.id, "guru.create");
+
+  if (!userPermis) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Forbidden",
+      },
+      { status: 403 }
     );
   }
 
