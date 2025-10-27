@@ -35,7 +35,7 @@ interface SidebarProps {
   isMobileOpen: boolean;
   onToggle: () => void;
   onClose: () => void;
-  user: SessionUser | undefined;
+  user: SessionUser | null | undefined;
 }
 
 const checkPermission = (

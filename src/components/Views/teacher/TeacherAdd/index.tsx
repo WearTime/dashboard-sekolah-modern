@@ -7,7 +7,6 @@ import styles from "./TeacherAdd.module.css";
 import Button from "WT/components/Ui/Button";
 import { useUnsavedChanges } from "WT/hooks/useUnsavedChanges";
 import ConfirmationModal from "WT/components/Layout/ConfirmationModal";
-import { Mapel } from "WT/types/mapel";
 import { useTeachers } from "WT/hooks/useTeacher";
 
 interface TeacherFormData {

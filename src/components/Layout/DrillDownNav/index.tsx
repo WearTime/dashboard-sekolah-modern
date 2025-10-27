@@ -9,14 +9,13 @@ import Button from "WT/components/Ui/Button";
 
 const DrillDownNav = () => {
   const router = useRouter();
-  const { stats, loading, getFilteredStats } = useDashboardStats();
+  const { loading, getFilteredStats } = useDashboardStats();
   const [drillState, setDrillState] = useState<DrillState>({
     level: "main",
     filters: {},
     entityType: null,
   });
 
-  // Gunakan stats yang sudah difilter
   const filteredStats = getFilteredStats(drillState);
 
   const handleDrillDown = (
@@ -36,9 +35,6 @@ const DrillDownNav = () => {
   };
 
   const handleBack = () => {
-    // Siswa: main > gender > kelas > jurusan
-    // Guru: main > gender > status > golongan
-    // Mapel: main > tipe > jurusan (untuk Jurusan) atau langsung list (untuk Umum)
     const siswaLevels: DrillState["level"][] = [
       "main",
       "gender",
@@ -93,7 +89,6 @@ const DrillDownNav = () => {
   const navigateToList = () => {
     const params = new URLSearchParams();
 
-    // For Siswa
     if (drillState.entityType === "siswa") {
       if (drillState.filters.gender) {
         params.append("jenis_kelamin", drillState.filters.gender);
@@ -107,7 +102,6 @@ const DrillDownNav = () => {
       router.push(`/siswa?${params.toString()}`);
     }
 
-    // For Guru
     if (drillState.entityType === "guru") {
       if (drillState.filters.gender) {
         params.append("jenis_kelamin", drillState.filters.gender);
@@ -124,7 +118,6 @@ const DrillDownNav = () => {
       router.push(`/guru?${queryString}`);
     }
 
-    // For Mapel
     if (drillState.entityType === "mapel") {
       if (drillState.filters.tipe) {
         params.append("tipe_mapel", drillState.filters.tipe);
@@ -181,7 +174,6 @@ const DrillDownNav = () => {
       ];
     }
 
-    // ===== SISWA DRILL DOWN =====
     if (drillState.entityType === "siswa" && drillState.level === "gender") {
       return [
         {
@@ -280,7 +272,6 @@ const DrillDownNav = () => {
             filters: newFilters,
           });
 
-          // Navigate dengan filters yang baru
           const params = new URLSearchParams();
           if (newFilters.gender) {
             params.append("jenis_kelamin", newFilters.gender);
@@ -299,7 +290,6 @@ const DrillDownNav = () => {
       }));
     }
 
-    // ===== GURU DRILL DOWN =====
     if (drillState.entityType === "guru" && drillState.level === "gender") {
       return [
         {
@@ -398,7 +388,6 @@ const DrillDownNav = () => {
             filters: newFilters,
           });
 
-          // Navigate dengan filters yang baru
           const params = new URLSearchParams();
           if (newFilters.gender) {
             params.append("jenis_kelamin", newFilters.gender);
@@ -417,7 +406,6 @@ const DrillDownNav = () => {
       }));
     }
 
-    // ===== MAPEL DRILL DOWN =====
     if (drillState.entityType === "mapel" && drillState.level === "tipe") {
       return [
         {
@@ -432,7 +420,6 @@ const DrillDownNav = () => {
               filters: newFilters,
             });
 
-            // Navigate langsung dengan filter tipe
             const params = new URLSearchParams();
             params.append("tipe_mapel", "Umum");
 
@@ -471,7 +458,6 @@ const DrillDownNav = () => {
             filters: newFilters,
           });
 
-          // Navigate dengan filters yang baru
           const params = new URLSearchParams();
           if (newFilters.tipe) {
             params.append("tipe_mapel", newFilters.tipe);

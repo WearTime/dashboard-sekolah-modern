@@ -174,3 +174,27 @@ model RolePermissions {
 
   @@unique([role, permissionId])
 }
+
+model Prestasi {
+  id             String        @id @default(uuid())
+  name           String
+  description    String        @db.LongText
+  penyelenggara  String
+  recipient_type RecipientType
+  level          LevelPrestasi
+  tanggal        DateTime      @db.Date
+  image          String
+  createdAt      DateTime
+}
+
+enum LevelPrestasi {
+  Provinsi
+  Nasional
+  Internasional
+}
+
+enum RecipientType {
+  Siswa
+  Sekolah
+  GTK
+}

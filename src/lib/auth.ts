@@ -21,16 +21,7 @@ export async function getSession(): Promise<IronSession<SessionData>> {
 export async function createSession(user: SessionData["user"]) {
   const session = await getSession();
 
-  if (user) {
-    const permissions = await getUserPermissions(user.id);
-    session.user = {
-      ...user,
-      permissions,
-    };
-  } else {
-    session.user = user;
-  }
-
+  session.user = user;
   session.isLoggedIn = true;
   await session.save();
 }
@@ -48,13 +39,14 @@ export async function isAuthenticated(): Promise<boolean> {
 export async function getCurrentUser() {
   const session = await getSession();
 
-  if (session.user && !session.user.permissions) {
-    const permissions = await getUserPermissions(session.user.id);
-    session.user.permissions = permissions;
-    await session.save();
-  }
+  if (!session.user) return null;
 
-  return session.user;
+  const permissions = await getUserPermissions(session.user.id);
+
+  return {
+    ...session.user,
+    permissions,
+  };
 }
 
 export async function requireAuth() {

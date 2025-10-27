@@ -13,7 +13,7 @@ interface StudentTableProps {
   onDelete: (nisn: string, nama: string) => void;
   onView: (siswa: Siswa) => void;
   onEdit: (siswa: Siswa) => void;
-  user: SessionUser | undefined;
+  user: SessionUser | null | undefined;
 }
 
 const StudentTable = ({

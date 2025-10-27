@@ -7,7 +7,7 @@ import Button from "WT/components/Ui/Button";
 
 interface NavbarProps {
   title: string;
-  user: SessionUser | undefined;
+  user: SessionUser | null | undefined;
 }
 
 const Navbar = ({ title = "Dashboard", user }: NavbarProps) => {

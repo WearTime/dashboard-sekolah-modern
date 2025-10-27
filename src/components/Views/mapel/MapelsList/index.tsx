@@ -13,7 +13,7 @@ import DeleteConfirmModal from "WT/components/Layout/MapelModal/DeleteConfirmMod
 import EditMapelModal from "WT/components/Layout/MapelModal/EditMapelModal";
 import MapelTable from "WT/components/Layout/Mapel/MapelsTable";
 
-const ListMapelPage = ({ user }: { user: SessionUser | undefined }) => {
+const ListMapelPage = ({ user }: { user: SessionUser | null | undefined }) => {
   const searchParams = useSearchParams();
   const [showFilter, setShowFilter] = useState(false);
   const [selectedMapel, setSelectedMapel] = useState<Mapel | null>(null);

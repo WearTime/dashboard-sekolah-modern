@@ -13,7 +13,7 @@ import ViewTeacherModal from "WT/components/Layout/TeacherModal/ViewTeacherModal
 import DeleteConfirmModal from "WT/components/Layout/TeacherModal/DeleteConfirmModal";
 import EditTeacherModal from "WT/components/Layout/TeacherModal/EditTeacherModal";
 
-const ListGuruPage = ({ user }: { user: SessionUser | undefined }) => {
+const ListGuruPage = ({ user }: { user: SessionUser | null | undefined }) => {
   const searchParams = useSearchParams();
   const [showFilter, setShowFilter] = useState(false);
   const [selectedTeacher, setSelectedTeacher] = useState<Guru | null>(null);

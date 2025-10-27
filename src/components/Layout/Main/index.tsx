@@ -10,7 +10,7 @@ import Button from "WT/components/Ui/Button";
 interface MainLayoutProps {
   children: ReactNode;
   pageTitle?: string;
-  user?: SessionUser;
+  user?: SessionUser | null;
 }
 
 const MainLayout = ({

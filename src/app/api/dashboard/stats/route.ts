@@ -23,7 +23,7 @@ export async function GET() {
       prisma.dataSiswa.count(),
       prisma.dataSiswa.count({ where: { jenis_kelamin: "L" } }),
       prisma.dataSiswa.count({ where: { jenis_kelamin: "P" } }),
-      // Grouping dengan gender, kelas, dan jurusan
+
       prisma.dataSiswa.groupBy({
         by: ["kelas", "jurusan", "jenis_kelamin"],
         _count: true,
@@ -31,7 +31,7 @@ export async function GET() {
       prisma.dataGuru.count(),
       prisma.dataGuru.count({ where: { jenis_kelamin: "L" } }),
       prisma.dataGuru.count({ where: { jenis_kelamin: "P" } }),
-      // Grouping dengan gender, status, dan golongan
+
       prisma.dataGuru.groupBy({
         by: ["status", "golongan", "jenis_kelamin"],
         _count: true,
@@ -47,7 +47,6 @@ export async function GET() {
       }),
     ]);
 
-    // Build struktur data siswa dengan breakdown lengkap
     const byKelas = {
       X: {
         total: 0,
@@ -87,7 +86,6 @@ export async function GET() {
       const jurusan = item.jurusan;
       const count = item._count;
 
-      // Total per kelas
       byKelas[kelas].total += count;
       if (gender === "L") {
         byKelas[kelas].laki += count;
@@ -95,13 +93,11 @@ export async function GET() {
         byKelas[kelas].perempuan += count;
       }
 
-      // Total per jurusan (tanpa gender)
       if (!byKelas[kelas].byJurusan[jurusan]) {
         byKelas[kelas].byJurusan[jurusan] = 0;
       }
       byKelas[kelas].byJurusan[jurusan] += count;
 
-      // Total per jurusan dengan gender
       if (!byKelas[kelas].byJurusanGender[jurusan]) {
         byKelas[kelas].byJurusanGender[jurusan] = {
           total: 0,
@@ -117,7 +113,6 @@ export async function GET() {
       }
     });
 
-    // Build struktur data guru dengan breakdown lengkap
     const byStatus = {
       ASN: {
         total: 0,
@@ -157,7 +152,6 @@ export async function GET() {
       const golongan = item.golongan;
       const count = item._count;
 
-      // Total per status
       byStatus[status].total += count;
       if (gender === "L") {
         byStatus[status].laki += count;
@@ -166,13 +160,11 @@ export async function GET() {
       }
 
       if (golongan) {
-        // Total per golongan (tanpa gender)
         if (!byStatus[status].byGolongan[golongan]) {
           byStatus[status].byGolongan[golongan] = 0;
         }
         byStatus[status].byGolongan[golongan] += count;
 
-        // Total per golongan dengan gender
         if (!byStatus[status].byGolonganGender[golongan]) {
           byStatus[status].byGolonganGender[golongan] = {
             total: 0,

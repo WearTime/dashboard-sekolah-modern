@@ -13,7 +13,7 @@ interface MapelTableProps {
   onDelete: (kode_mapel: string, nama_mapel: string) => void;
   onView: (mapel: Mapel) => void;
   onEdit: (mapel: Mapel) => void;
-  user: SessionUser | undefined;
+  user: SessionUser | null | undefined;
 }
 
 const MapelTable = ({

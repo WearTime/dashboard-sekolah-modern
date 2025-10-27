@@ -1,9 +1,9 @@
 "use client";
 
 import { Siswa } from "WT/types/student";
-import Modal from "WT/components/Layout/Modal";
-import styles from "./ViewStudentModal.module.css";
-import Button from "WT/components/Ui/Button";
+import BaseViewModal, {
+  InfoSection,
+} from "WT/components/Layout/BaseModal/BaseViewModal";
 
 interface ViewStudentModalProps {
   isOpen: boolean;
@@ -26,91 +26,80 @@ const ViewStudentModal = ({
     });
   };
 
-  return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Detail Siswa" size="large">
-      <div className={styles.studentDetail}>
-        <div className={styles.imageSection}>
-          {student.image ? (
-            <img
-              src={student.image}
-              alt={student.nama}
-              className={styles.studentImage}
-            />
-          ) : (
-            <div className={styles.noImage}>
-              <i className="fas fa-user"></i>
-            </div>
-          )}
-        </div>
+  const sections: InfoSection[] = [
+    {
+      title: "Informasi Pribadi",
+      items: [
+        { label: "Nama Lengkap", value: student.nama },
+        { label: "NISN", value: student.nisn },
+        {
+          label: "Jenis Kelamin",
+          value: student.jenis_kelamin === "L" ? "Laki-laki" : "Perempuan",
+        },
+        { label: "Tempat Lahir", value: student.tempat_lahir || "-" },
+        {
+          label: "Tanggal Lahir",
+          value: student.tanggal_lahir
+            ? formatDate(student.tanggal_lahir)
+            : "-",
+        },
+        { label: "No. HP", value: student.no_hp || "-" },
+      ],
+    },
+    {
+      title: "Informasi Akademik",
+      items: [
+        { label: "Kelas", value: student.kelas },
+        { label: "Jurusan", value: student.jurusan },
+      ],
+    },
+  ];
 
-        <div className={styles.infoSection}>
-          <div className={styles.infoGroup}>
-            <h6 className={styles.infoLabel}>Informasi Pribadi</h6>
-            <div className={styles.infoGrid}>
-              <div className={styles.infoItem}>
-                <span className={styles.label}>Nama Lengkap</span>
-                <span className={styles.value}>{student.nama}</span>
-              </div>
-              <div className={styles.infoItem}>
-                <span className={styles.label}>NISN</span>
-                <span className={styles.value}>{student.nisn}</span>
-              </div>
-              <div className={styles.infoItem}>
-                <span className={styles.label}>Jenis Kelamin</span>
-                <span className={styles.value}>
-                  {student.jenis_kelamin === "L" ? "Laki-laki" : "Perempuan"}
-                </span>
-              </div>
-              <div className={styles.infoItem}>
-                <span className={styles.label}>Tempat Lahir</span>
-                <span className={styles.value}>
-                  {student.tempat_lahir || "-"}
-                </span>
-              </div>
-              <div className={styles.infoItem}>
-                <span className={styles.label}>Tanggal Lahir</span>
-                <span className={styles.value}>
-                  {student.tanggal_lahir
-                    ? formatDate(student.tanggal_lahir)
-                    : "-"}
-                </span>
-              </div>
-              <div className={styles.infoItem}>
-                <span className={styles.label}>No. HP</span>
-                <span className={styles.value}>{student.no_hp || "-"}</span>
-              </div>
-            </div>
-          </div>
-
-          <div className={styles.infoGroup}>
-            <h6 className={styles.infoLabel}>Informasi Akademik</h6>
-            <div className={styles.infoGrid}>
-              <div className={styles.infoItem}>
-                <span className={styles.label}>Kelas</span>
-                <span className={styles.value}>{student.kelas}</span>
-              </div>
-              <div className={styles.infoItem}>
-                <span className={styles.label}>Jurusan</span>
-                <span className={styles.value}>{student.jurusan}</span>
-              </div>
-            </div>
-          </div>
-
-          {student.alamat && (
-            <div className={styles.infoGroup}>
-              <h6 className={styles.infoLabel}>Alamat</h6>
-              <p className={styles.alamatText}>{student.alamat}</p>
-            </div>
-          )}
-        </div>
-
-        <div className={styles.modalActions}>
-          <Button className={styles.btnClose} onClick={onClose}>
-            Tutup
-          </Button>
-        </div>
+  const alamatSection = student.alamat ? (
+    <div style={{ marginTop: "1rem" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "1rem",
+        }}
+      >
+        <h6
+          style={{
+            fontSize: "1rem",
+            fontWeight: 600,
+            color: "#26a7b8",
+            margin: 0,
+            paddingBottom: "0.5rem",
+            borderBottom: "2px solid #26a7b8",
+          }}
+        >
+          Alamat
+        </h6>
+        <p
+          style={{
+            margin: 0,
+            fontSize: "1rem",
+            color: "#1f2937",
+            lineHeight: 1.6,
+          }}
+        >
+          {student.alamat}
+        </p>
       </div>
-    </Modal>
+    </div>
+  ) : null;
+
+  return (
+    <BaseViewModal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Detail Siswa"
+      image={student.image ?? undefined}
+      imageAlt={student.nama}
+      sections={sections}
+      extraContent={alamatSection}
+    />
   );
 };
 

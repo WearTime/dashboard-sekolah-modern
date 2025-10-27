@@ -13,7 +13,7 @@ import EditStudentModal from "WT/components/Layout/SiswaModal/EditStudentModal";
 import ViewStudentModal from "WT/components/Layout/SiswaModal/ViewStudentModal";
 import { useSearchParams } from "next/navigation";
 
-const ListSiswaPage = ({ user }: { user: SessionUser | undefined }) => {
+const ListSiswaPage = ({ user }: { user: SessionUser | null | undefined }) => {
   const searchParams = useSearchParams();
   const [showFilter, setShowFilter] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState<Siswa | null>(null);

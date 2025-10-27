@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import Button from "WT/components/Ui/Button";
 import styles from "./ConfirmationModal.module.css";
-import Modal from "WT/components/Layout/Modal";
+import Modal from "WT/components/Ui/Modal";
 
 interface ConfirmationModalProps {
   isOpen: boolean;

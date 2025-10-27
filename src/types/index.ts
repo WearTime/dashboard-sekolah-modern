@@ -5,7 +5,7 @@ export interface SessionUser {
   name: string;
   email: string;
   role: UserRole;
-  permissions?: string[];
+  permissions: string[];
 }
 
 export interface SessionData {

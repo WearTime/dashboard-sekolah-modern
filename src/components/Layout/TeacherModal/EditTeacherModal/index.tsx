@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { GuruWithRelations } from "WT/types/teacher";
-import Modal from "WT/components/Layout/Modal";
+import Modal from "WT/components/Ui/Modal";
 import styles from "./EditTeacherModal.module.css";
 import { toast } from "react-toastify";
 import Button from "WT/components/Ui/Button";

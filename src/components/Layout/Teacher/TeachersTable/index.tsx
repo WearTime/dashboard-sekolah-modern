@@ -13,7 +13,7 @@ interface TeacherTableProps {
   onDelete: (nip: string, nama: string) => void;
   onView: (guru: Guru) => void;
   onEdit: (guru: Guru) => void;
-  user: SessionUser | undefined;
+  user: SessionUser | null | undefined;
 }
 
 const TeacherTable = ({
