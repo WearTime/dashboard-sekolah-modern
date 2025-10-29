@@ -181,6 +181,7 @@ model Prestasi {
   description    String        @db.LongText
   penyelenggara  String
   recipient_type RecipientType
+  nama_penerima  String
   level          LevelPrestasi
   tanggal        DateTime      @db.Date
   image          String

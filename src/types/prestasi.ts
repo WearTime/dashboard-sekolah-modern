@@ -4,6 +4,7 @@ export interface Prestasi {
   description: string;
   penyelenggara: string;
   recipient_type: "Siswa" | "Sekolah" | "GTK";
+  nama_penerima: string;
   level: "Provinsi" | "Nasional" | "Internasional";
   tanggal: Date;
   image: string;

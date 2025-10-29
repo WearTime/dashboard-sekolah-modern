@@ -48,6 +48,61 @@ const PrestasiTable = ({
     return "";
   };
 
+  const canEditDelete = (item: Prestasi): boolean => {
+    if (!user || !user.permissions) return false;
+
+    let permissionPrefix = "";
+    if (item.recipient_type === "Siswa") {
+      permissionPrefix = "prestasi.siswa";
+    } else if (item.recipient_type === "Sekolah") {
+      permissionPrefix = "prestasi.sekolah";
+    } else if (item.recipient_type === "GTK") {
+      const levelLower = item.level.toLowerCase();
+      permissionPrefix = `prestasi.gtk.${levelLower}`;
+    }
+
+    const hasEditPermission = user.permissions.includes(
+      `${permissionPrefix}.edit`
+    );
+    const hasDeletePermission = user.permissions.includes(
+      `${permissionPrefix}.delete`
+    );
+
+    return hasEditPermission || hasDeletePermission;
+  };
+
+  const canEdit = (item: Prestasi): boolean => {
+    if (!user || !user.permissions) return false;
+
+    let permissionName = "";
+    if (item.recipient_type === "Siswa") {
+      permissionName = "prestasi.siswa.edit";
+    } else if (item.recipient_type === "Sekolah") {
+      permissionName = "prestasi.sekolah.edit";
+    } else if (item.recipient_type === "GTK") {
+      const levelLower = item.level.toLowerCase();
+      permissionName = `prestasi.gtk.${levelLower}.edit`;
+    }
+
+    return user.permissions.includes(permissionName);
+  };
+
+  const canDelete = (item: Prestasi): boolean => {
+    if (!user || !user.permissions) return false;
+
+    let permissionName = "";
+    if (item.recipient_type === "Siswa") {
+      permissionName = "prestasi.siswa.delete";
+    } else if (item.recipient_type === "Sekolah") {
+      permissionName = "prestasi.sekolah.delete";
+    } else if (item.recipient_type === "GTK") {
+      const levelLower = item.level.toLowerCase();
+      permissionName = `prestasi.gtk.${levelLower}.delete`;
+    }
+
+    return user.permissions.includes(permissionName);
+  };
+
   if (loading) {
     return (
       <div className={styles.tableContainer}>
@@ -58,6 +113,7 @@ const PrestasiTable = ({
               <th>Prestasi</th>
               <th>Penyelenggara</th>
               <th>Penerima</th>
+              <th>Nama Penerima</th>
               <th>Tingkat</th>
               <th>Tanggal</th>
               <th>Aksi</th>
@@ -65,7 +121,7 @@ const PrestasiTable = ({
           </thead>
           <tbody>
             <tr>
-              <td colSpan={7}>
+              <td colSpan={8}>
                 <div className={styles.loadingState}>
                   <i className="fas fa-spinner fa-spin"></i>
                   <p>Memuat data...</p>
@@ -88,6 +144,7 @@ const PrestasiTable = ({
               <th>Prestasi</th>
               <th>Penyelenggara</th>
               <th>Penerima</th>
+              <th>Nama Penerima</th>
               <th>Tingkat</th>
               <th>Tanggal</th>
               <th>Aksi</th>
@@ -95,7 +152,7 @@ const PrestasiTable = ({
           </thead>
           <tbody>
             <tr>
-              <td colSpan={7}>
+              <td colSpan={8}>
                 <div className={styles.emptyState}>
                   <i className="fas fa-trophy"></i>
                   <p>Tidak ada data prestasi</p>
@@ -117,6 +174,7 @@ const PrestasiTable = ({
             <th>Prestasi</th>
             <th>Penyelenggara</th>
             <th>Penerima</th>
+            <th>Nama Penerima</th>
             <th>Tingkat</th>
             <th>Tanggal</th>
             <th>Aksi</th>
@@ -155,6 +213,7 @@ const PrestasiTable = ({
                   {item.recipient_type}
                 </span>
               </td>
+              <td>{item.nama_penerima}</td>
               <td>
                 <span
                   className={`${styles.badge} ${getBadgeClass(
@@ -178,9 +237,9 @@ const PrestasiTable = ({
                   >
                     <i className="fas fa-eye"></i>
                   </Button>
-                  {user &&
-                    (user.role === "ADMIN" || user.role === "PRINCIPAL") && (
-                      <>
+                  {user && canEditDelete(item) && (
+                    <>
+                      {canEdit(item) && (
                         <Button
                           className={`${styles.btnAction} ${styles.btnEdit}`}
                           title="Edit"
@@ -191,6 +250,8 @@ const PrestasiTable = ({
                         >
                           <i className="fas fa-edit"></i>
                         </Button>
+                      )}
+                      {canDelete(item) && (
                         <Button
                           className={`${styles.btnAction} ${styles.btnDelete}`}
                           title="Hapus"
@@ -201,8 +262,9 @@ const PrestasiTable = ({
                         >
                           <i className="fas fa-trash"></i>
                         </Button>
-                      </>
-                    )}
+                      )}
+                    </>
+                  )}
                 </div>
               </td>
             </tr>

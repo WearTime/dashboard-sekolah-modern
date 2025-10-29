@@ -13,6 +13,7 @@ interface PrestasiFormData {
   description: string;
   penyelenggara: string;
   recipient_type: "Siswa" | "Sekolah" | "GTK";
+  nama_penerima: string;
   level: "Provinsi" | "Nasional" | "Internasional";
   tanggal: string;
   image?: string;
@@ -23,6 +24,7 @@ const initialFormData: PrestasiFormData = {
   description: "",
   penyelenggara: "",
   recipient_type: "Siswa",
+  nama_penerima: "",
   level: "Provinsi",
   tanggal: "",
 };
@@ -43,7 +45,6 @@ export default function TambahPrestasi() {
     ((value: boolean) => void) | null
   >(null);
 
-  // Set recipient_type dan level dari query parameter
   useEffect(() => {
     const type = searchParams.get("type") as "Siswa" | "Sekolah" | "GTK" | null;
     const levelParam = searchParams.get("level") as
@@ -69,6 +70,7 @@ export default function TambahPrestasi() {
       formData.name !== "" ||
       formData.description !== "" ||
       formData.penyelenggara !== "" ||
+      formData.nama_penerima !== "" ||
       formData.tanggal !== "" ||
       uploadedImagePath !== "";
 
@@ -243,7 +245,6 @@ export default function TambahPrestasi() {
         toast.success("Data prestasi berhasil disimpan!");
         setHasChanges(false);
 
-        // Redirect berdasarkan tipe dan level
         const type = formData.recipient_type.toLowerCase();
         if (formData.recipient_type === "GTK" && formData.level) {
           const level = formData.level.toLowerCase();
@@ -358,6 +359,22 @@ export default function TambahPrestasi() {
                 </div>
                 <div className={styles.formGroup}>
                   <label>
+                    Nama Penerima<span className={styles.required}>*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="nama_penerima"
+                    value={formData.nama_penerima}
+                    onChange={handleInputChange}
+                    placeholder="Masukkan nama penerima prestasi"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className={styles.formRow}>
+                <div className={styles.formGroup}>
+                  <label>
                     Tingkat<span className={styles.required}>*</span>
                   </label>
                   <select
@@ -371,9 +388,6 @@ export default function TambahPrestasi() {
                     <option value="Internasional">Internasional</option>
                   </select>
                 </div>
-              </div>
-
-              <div className={styles.formRow}>
                 <div className={styles.formGroup}>
                   <label>
                     Tanggal<span className={styles.required}>*</span>

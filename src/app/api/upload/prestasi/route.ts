@@ -5,7 +5,7 @@ import { unlink } from "fs/promises";
 import path from "path";
 import crypto from "crypto";
 import { getCurrentUser } from "WT/lib/auth";
-import { hasPermission } from "WT/lib/permissions";
+import { hasAnyPermission } from "WT/lib/permissions";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -21,21 +21,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const userPermis = await hasPermission(user.id, "prestasi.create");
+    const hasCreatePermission = await hasAnyPermission(user.id, [
+      "prestasi.siswa.create",
+      "prestasi.sekolah.create",
+      "prestasi.gtk.provinsi.create",
+      "prestasi.gtk.nasional.create",
+      "prestasi.gtk.internasional.create",
+    ]);
 
-    if (!userPermis) {
+    if (!hasCreatePermission) {
       return NextResponse.json(
         {
           success: false,
-          message: "Forbidden",
+          message: "Forbidden - Anda tidak memiliki permission untuk upload",
         },
-        { status: 403 }
-      );
-    }
-
-    if (user.role !== "PRINCIPAL" && user.role !== "ADMIN") {
-      return NextResponse.json(
-        { success: false, message: "Forbidden" },
         { status: 403 }
       );
     }
@@ -63,20 +62,14 @@ export async function POST(request: NextRequest) {
 
     if (file.size < MIN_FILE_SIZE) {
       return NextResponse.json(
-        {
-          success: false,
-          message: "Ukuran file terlalu kecil. Minimal 1KB",
-        },
+        { success: false, message: "Ukuran file terlalu kecil. Minimal 1KB" },
         { status: 400 }
       );
     }
 
     if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
-        {
-          success: false,
-          message: "Ukuran file terlalu besar. Maksimal 5MB",
-        },
+        { success: false, message: "Ukuran file terlalu besar. Maksimal 5MB" },
         { status: 400 }
       );
     }
@@ -118,24 +111,31 @@ export async function POST(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
   try {
     const user = await getCurrentUser();
-    if (!user || (user.role !== "PRINCIPAL" && user.role !== "ADMIN")) {
+    if (!user) {
       return NextResponse.json(
         { success: false, message: "Unauthorized" },
         { status: 401 }
       );
     }
 
-    // const userPermis = await hasPermission(user.id, "prestasi.delete");
+    const hasDeletePermission = await hasAnyPermission(user.id, [
+      "prestasi.siswa.delete",
+      "prestasi.sekolah.delete",
+      "prestasi.gtk.provinsi.delete",
+      "prestasi.gtk.nasional.delete",
+      "prestasi.gtk.internasional.delete",
+    ]);
 
-    // if (!userPermis) {
-    //   return NextResponse.json(
-    //     {
-    //       success: false,
-    //       message: "Forbidden",
-    //     },
-    //     { status: 403 }
-    //   );
-    // }
+    if (!hasDeletePermission) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            "Forbidden - Anda tidak memiliki permission untuk menghapus file",
+        },
+        { status: 403 }
+      );
+    }
 
     const { searchParams } = new URL(request.url);
     const filePath = searchParams.get("path");

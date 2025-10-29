@@ -18,10 +18,7 @@ export async function GET(
 
     if (!prestasi) {
       return NextResponse.json(
-        {
-          success: false,
-          message: "Data prestasi tidak ditemukan",
-        },
+        { success: false, message: "Data prestasi tidak ditemukan" },
         { status: 404 }
       );
     }
@@ -45,40 +42,37 @@ export async function PUT(
 
   if (!user) {
     return NextResponse.json(
-      {
-        success: false,
-        message: "Unauthorized",
-      },
+      { success: false, message: "Unauthorized" },
       { status: 401 }
-    );
-  }
-
-  const userPermis = await hasPermission(user.id, "prestasi.edit");
-
-  if (!userPermis) {
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Forbidden",
-      },
-      { status: 403 }
-    );
-  }
-
-  if (user.role !== "PRINCIPAL" && user.role !== "ADMIN") {
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Forbidden",
-      },
-      {
-        status: 403,
-      }
     );
   }
 
   try {
     const body = await request.json();
+    const { recipient_type, level } = body;
+
+    let permissionName = "";
+    if (recipient_type === "Siswa") {
+      permissionName = "prestasi.siswa.edit";
+    } else if (recipient_type === "Sekolah") {
+      permissionName = "prestasi.sekolah.edit";
+    } else if (recipient_type === "GTK") {
+      const levelLower = level.toLowerCase();
+      permissionName = `prestasi.gtk.${levelLower}.edit`;
+    }
+
+    const userPermis = await hasPermission(user.id, permissionName);
+
+    if (!userPermis) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            "Forbidden - Anda tidak memiliki permission untuk mengedit prestasi ini",
+        },
+        { status: 403 }
+      );
+    }
 
     const prestasi = await prisma.prestasi.update({
       where: { id },
@@ -87,6 +81,7 @@ export async function PUT(
         description: body.description,
         penyelenggara: body.penyelenggara,
         recipient_type: body.recipient_type,
+        nama_penerima: body.nama_penerima,
         level: body.level,
         tanggal: new Date(body.tanggal),
         image: body.image || "",
@@ -116,39 +111,46 @@ export async function DELETE(
 
   if (!user) {
     return NextResponse.json(
-      {
-        success: false,
-        message: "Unauthorized",
-      },
+      { success: false, message: "Unauthorized" },
       { status: 401 }
     );
   }
 
-  const userPermis = await hasPermission(user.id, "prestasi.delete");
-
-  if (!userPermis) {
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Forbidden",
-      },
-      { status: 403 }
-    );
-  }
-
-  if (user.role !== "PRINCIPAL" && user.role !== "ADMIN") {
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Forbidden",
-      },
-      {
-        status: 403,
-      }
-    );
-  }
-
   try {
+    const prestasi = await prisma.prestasi.findUnique({
+      where: { id },
+    });
+
+    if (!prestasi) {
+      return NextResponse.json(
+        { success: false, message: "Data prestasi tidak ditemukan" },
+        { status: 404 }
+      );
+    }
+
+    let permissionName = "";
+    if (prestasi.recipient_type === "Siswa") {
+      permissionName = "prestasi.siswa.delete";
+    } else if (prestasi.recipient_type === "Sekolah") {
+      permissionName = "prestasi.sekolah.delete";
+    } else if (prestasi.recipient_type === "GTK") {
+      const levelLower = prestasi.level.toLowerCase();
+      permissionName = `prestasi.gtk.${levelLower}.delete`;
+    }
+
+    const userPermis = await hasPermission(user.id, permissionName);
+
+    if (!userPermis) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            "Forbidden - Anda tidak memiliki permission untuk menghapus prestasi ini",
+        },
+        { status: 403 }
+      );
+    }
+
     await prisma.prestasi.delete({
       where: { id },
     });

@@ -194,6 +194,12 @@ const SlideView = ({
                 </span>
               </div>
               <div className={styles.infoItem}>
+                <span className={styles.infoLabel}>Nama Penerima</span>
+                <span className={styles.infoValue}>
+                  {currentPrestasi.nama_penerima}
+                </span>
+              </div>
+              <div className={styles.infoItem}>
                 <span className={styles.infoLabel}>Tingkat</span>
                 <span
                   className={`${styles.badge} ${getBadgeClass(

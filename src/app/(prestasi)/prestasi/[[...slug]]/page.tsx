@@ -26,6 +26,7 @@ const levelLabels = {
 
 interface PageProps {
   params: Promise<{ slug?: string[] }>;
+  searchParams?: { [key: string]: string | string[] | undefined };
 }
 
 export async function generateMetadata({ params }: PageProps) {
@@ -77,28 +78,62 @@ export async function generateMetadata({ params }: PageProps) {
   };
 }
 
-export default async function PrestasiPage({ params }: PageProps) {
+export default async function PrestasiPage({
+  params,
+  searchParams,
+}: PageProps) {
   const resolvedParams = await params;
+  const resolvedSearchParams = await searchParams;
   const slug = resolvedParams.slug ?? [];
   const [type, level] = slug.map((s) => s.toLowerCase());
   const user = await getCurrentUser();
+  const queryType = (
+    resolvedSearchParams?.type as string | undefined
+  )?.toLowerCase();
+  const queryLevel = (
+    resolvedSearchParams?.level as string | undefined
+  )?.toLowerCase();
 
   if (slug.length === 0) {
     notFound();
   }
 
   if (type === "tambah") {
-    if (!user) {
-      redirect("/login");
-    }
+    if (!user) redirect("/login");
 
-    const userPermis = await hasPermission(user.id, "prestasi.create");
-    if (!userPermis) {
+    const recipient_type = queryType || " ";
+    const recipient_level = queryLevel;
+
+    let permissionName = "";
+    if (recipient_type === "siswa") {
+      permissionName = "prestasi.siswa.create";
+    } else if (recipient_type === "sekolah") {
+      permissionName = "prestasi.sekolah.create";
+    } else if (recipient_type === "gtk") {
+      if (
+        recipient_level &&
+        validLevels.includes(recipient_level as LevelType)
+      ) {
+        permissionName = `prestasi.gtk.${recipient_level}.create`;
+      } else {
+        forbidden();
+      }
+    } else {
       forbidden();
     }
 
+    const userPermis = await hasPermission(user.id, permissionName);
+    if (!userPermis) forbidden();
+
     return (
-      <MainLayout pageTitle="Tambah Prestasi" user={user}>
+      <MainLayout
+        pageTitle={`Tambah Prestasi ${recipient_type.toUpperCase()}${
+          recipient_type === "gtk" && recipient_level
+            ? ` (${recipient_level.toUpperCase()})`
+            : ""
+        }`}
+        user={user}
+      >
         <TambahPrestasi />
       </MainLayout>
     );

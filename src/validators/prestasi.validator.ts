@@ -16,6 +16,10 @@ export const prestasiSchema = z.object({
   recipient_type: z.enum(["Siswa", "Sekolah", "GTK"], {
     message: "Pilih tipe penerima",
   }),
+  nama_penerima: z
+    .string()
+    .min(3, "Nama penerima minimal 3 karakter")
+    .max(200, "Nama penerima maksimal 200 karakter"),
   level: z.enum(["Provinsi", "Nasional", "Internasional"], {
     message: "Pilih tingkat prestasi",
   }),

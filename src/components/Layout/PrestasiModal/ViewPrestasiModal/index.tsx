@@ -29,6 +29,7 @@ const ViewModal = ({ isOpen, onClose, prestasi }: ViewModalProps) => {
         { label: "Nama Prestasi", value: prestasi.name },
         { label: "Penyelenggara", value: prestasi.penyelenggara },
         { label: "Penerima", value: prestasi.recipient_type },
+        { label: "Nama Penerima", value: prestasi.nama_penerima },
         { label: "Tingkat", value: prestasi.level },
         { label: "Tanggal", value: formatDate(prestasi.tanggal) },
       ],

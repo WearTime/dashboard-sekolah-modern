@@ -24,6 +24,7 @@ export async function GET(request: NextRequest) {
         { name: { contains: search } },
         { penyelenggara: { contains: search } },
         { description: { contains: search } },
+        { nama_penerima: { contains: search } },
       ];
     }
 
@@ -35,7 +36,6 @@ export async function GET(request: NextRequest) {
       where.level = level;
     }
 
-    // Filter untuk 1 bulan terakhir jika diminta
     if (lastMonth) {
       const oneMonthAgo = new Date();
       oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
@@ -78,40 +78,37 @@ export async function POST(request: NextRequest) {
 
   if (!user) {
     return NextResponse.json(
-      {
-        success: false,
-        message: "Unauthorized",
-      },
+      { success: false, message: "Unauthorized" },
       { status: 401 }
-    );
-  }
-
-  const userPermis = await hasPermission(user.id, "prestasi.create");
-
-  if (!userPermis) {
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Forbidden",
-      },
-      { status: 403 }
-    );
-  }
-
-  if (user.role !== "PRINCIPAL" && user.role !== "ADMIN") {
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Forbidden",
-      },
-      {
-        status: 403,
-      }
     );
   }
 
   try {
     const body = await request.json();
+    const { recipient_type, level } = body;
+
+    let permissionName = "";
+    if (recipient_type === "Siswa") {
+      permissionName = "prestasi.siswa.create";
+    } else if (recipient_type === "Sekolah") {
+      permissionName = "prestasi.sekolah.create";
+    } else if (recipient_type === "GTK") {
+      const levelLower = level.toLowerCase();
+      permissionName = `prestasi.gtk.${levelLower}.create`;
+    }
+
+    const userPermis = await hasPermission(user.id, permissionName);
+
+    if (!userPermis) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            "Forbidden - Anda tidak memiliki permission untuk membuat prestasi ini",
+        },
+        { status: 403 }
+      );
+    }
 
     const prestasi = await prisma.prestasi.create({
       data: {
@@ -119,6 +116,7 @@ export async function POST(request: NextRequest) {
         description: body.description,
         penyelenggara: body.penyelenggara,
         recipient_type: body.recipient_type,
+        nama_penerima: body.nama_penerima,
         level: body.level,
         tanggal: new Date(body.tanggal),
         image: body.image || "",

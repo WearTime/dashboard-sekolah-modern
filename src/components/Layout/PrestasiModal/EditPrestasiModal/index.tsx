@@ -40,6 +40,7 @@ const EditModal = ({
       description: "",
       penyelenggara: "",
       recipient_type: "Siswa" as "Siswa" | "Sekolah" | "GTK",
+      nama_penerima: "",
       level: "Provinsi" as "Provinsi" | "Nasional" | "Internasional",
       tanggal: "",
     },
@@ -97,6 +98,7 @@ const EditModal = ({
         description: prestasi.description,
         penyelenggara: prestasi.penyelenggara,
         recipient_type: prestasi.recipient_type,
+        nama_penerima: prestasi.nama_penerima,
         level: prestasi.level,
         tanggal: tanggalFormatted,
       });
@@ -148,6 +150,14 @@ const EditModal = ({
               { value: "Sekolah", label: "Sekolah" },
               { value: "GTK", label: "GTK" },
             ]}
+            required
+          />
+
+          <FormInput
+            label="Nama Penerima"
+            name="nama_penerima"
+            value={form.values.nama_penerima}
+            onChange={form.handleChange}
             required
           />
 
