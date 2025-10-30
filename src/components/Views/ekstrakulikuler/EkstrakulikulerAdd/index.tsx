@@ -10,18 +10,31 @@ import ConfirmationModal from "WT/components/Layout/ConfirmationModal";
 
 interface EkstrakulikulerFormData {
   namaEskul: string;
+  slug: string;
   pendamping: string;
   ketua: string;
   description: string;
   imagesThumbnail?: string;
+  order: number;
+  isActive: boolean;
 }
 
 const initialFormData: EkstrakulikulerFormData = {
   namaEskul: "",
+  slug: "",
   pendamping: "",
   ketua: "",
   description: "",
+  order: 0,
+  isActive: true,
 };
+
+function generateSlug(namaEskul: string): string {
+  return namaEskul
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
 
 export default function TambahEkstrakulikuler() {
   const router = useRouter();
@@ -32,6 +45,7 @@ export default function TambahEkstrakulikuler() {
   const [formData, setFormData] =
     useState<EkstrakulikulerFormData>(initialFormData);
   const [hasChanges, setHasChanges] = useState(false);
+  const [autoGenerateSlug, setAutoGenerateSlug] = useState(true);
 
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [showNavigateModal, setShowNavigateModal] = useState(false);
@@ -49,6 +63,15 @@ export default function TambahEkstrakulikuler() {
 
     setHasChanges(isModified);
   }, [formData, uploadedImagePath]);
+
+  useEffect(() => {
+    if (autoGenerateSlug && formData.namaEskul) {
+      setFormData((prev) => ({
+        ...prev,
+        slug: generateSlug(formData.namaEskul),
+      }));
+    }
+  }, [formData.namaEskul, autoGenerateSlug]);
 
   const handleNavigationPrompt = (): Promise<boolean> => {
     return new Promise((resolve) => {
@@ -92,6 +115,11 @@ export default function TambahEkstrakulikuler() {
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSlugChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAutoGenerateSlug(false);
+    setFormData((prev) => ({ ...prev, slug: e.target.value }));
   };
 
   const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -266,12 +294,15 @@ export default function TambahEkstrakulikuler() {
 
           <form onSubmit={handleSubmit} className={styles.eskulForm}>
             <div className={styles.formSection}>
-              <div className={styles.sectionTitle}>Informasi Ekstrakulikuler</div>
+              <div className={styles.sectionTitle}>
+                Informasi Ekstrakulikuler
+              </div>
 
               <div className={styles.formRow}>
                 <div className={styles.formGroup}>
                   <label>
-                    Nama Ekstrakulikuler<span className={styles.required}>*</span>
+                    Nama Ekstrakulikuler
+                    <span className={styles.required}>*</span>
                   </label>
                   <input
                     type="text"
@@ -282,6 +313,27 @@ export default function TambahEkstrakulikuler() {
                     required
                   />
                 </div>
+                <div className={styles.formGroup}>
+                  <label>
+                    Slug (URL)<span className={styles.required}>*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="slug"
+                    value={formData.slug}
+                    onChange={handleSlugChange}
+                    placeholder="slug-untuk-url"
+                    pattern="[a-z0-9-]+"
+                    title="Hanya huruf kecil, angka, dan dash (-)"
+                    required
+                  />
+                  <small style={{ color: "#666", fontSize: "12px" }}>
+                    URL akan menjadi: /ekstrakulikuler/{formData.slug || "..."}
+                  </small>
+                </div>
+              </div>
+
+              <div className={styles.formRow}>
                 <div className={styles.formGroup}>
                   <label>
                     Pembina/Pendamping<span className={styles.required}>*</span>
@@ -295,9 +347,6 @@ export default function TambahEkstrakulikuler() {
                     required
                   />
                 </div>
-              </div>
-
-              <div className={styles.formRow}>
                 <div className={styles.formGroup}>
                   <label>
                     Ketua<span className={styles.required}>*</span>
@@ -330,7 +379,9 @@ export default function TambahEkstrakulikuler() {
             </div>
 
             <div className={styles.formSection}>
-              <div className={styles.sectionTitle}>Thumbnail Ekstrakulikuler</div>
+              <div className={styles.sectionTitle}>
+                Thumbnail Ekstrakulikuler
+              </div>
 
               <div
                 className={`${styles.photoUpload} ${

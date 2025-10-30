@@ -6,7 +6,13 @@ import styles from "./Sidebar.module.css";
 import { usePathname } from "next/navigation";
 import { SessionUser } from "WT/types";
 import Button from "WT/components/Ui/Button";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+
+interface Ekstrakulikuler {
+  id: string;
+  namaEskul: string;
+  slug: string;
+}
 
 interface SubMenuItem {
   label: string;
@@ -22,6 +28,8 @@ interface MenuItem {
   roleAccess?: string[];
   permission?: string;
   subItems?: SubMenuItem[];
+  isDynamic?: boolean;
+  clickableParent?: boolean;
 }
 
 interface MenuSection {
@@ -64,7 +72,7 @@ const checkPermission = (
   });
 };
 
-const menuSections: MenuSection[] = [
+const staticMenuSections: MenuSection[] = [
   {
     title: "GENERAL",
     items: [
@@ -78,6 +86,9 @@ const menuSections: MenuSection[] = [
         icon: "fas fa-users",
         label: "Ekstrakulikuler",
         href: "/ekstrakulikuler",
+        clickableParent: true,
+        isDynamic: true,
+        subItems: [],
       },
     ],
   },
@@ -98,20 +109,10 @@ const menuSections: MenuSection[] = [
         icon: "fas fa-star",
         label: "GTK",
         href: "/prestasi/gtk",
-
         subItems: [
-          {
-            label: "Provinsi",
-            href: "/prestasi/gtk/provinsi",
-          },
-          {
-            label: "Nasional",
-            href: "/prestasi/gtk/nasional",
-          },
-          {
-            label: "Internasional",
-            href: "/prestasi/gtk/internasional",
-          },
+          { label: "Provinsi", href: "/prestasi/gtk/provinsi" },
+          { label: "Nasional", href: "/prestasi/gtk/nasional" },
+          { label: "Internasional", href: "/prestasi/gtk/internasional" },
         ],
       },
     ],
@@ -124,67 +125,24 @@ const menuSections: MenuSection[] = [
         label: "Kurikulum",
         href: "/program/kurikulum",
       },
-      {
-        icon: "fas fa-user-tie",
-        label: "Sarpras",
-        href: "/program/sarpras",
-      },
-      {
-        icon: "fas fa-users-line",
-        label: "Siswa",
-        href: "/program/siswa",
-      },
-      {
-        icon: "fas fa-user-secret",
-        label: "Humas",
-        href: "/program/humas",
-      },
+      { icon: "fas fa-user-tie", label: "Sarpras", href: "/program/sarpras" },
+      { icon: "fas fa-users-line", label: "Siswa", href: "/program/siswa" },
+      { icon: "fas fa-user-secret", label: "Humas", href: "/program/humas" },
       {
         icon: "fas fa-tags",
         label: "Jurusan",
         href: "/program/jurusan",
-
         subItems: [
-          {
-            label: "PPLG",
-            href: "/program/jurusan/PPLG",
-          },
-          {
-            label: "AKL",
-            href: "/program/jurusan/AKL",
-          },
-          {
-            label: "TKJ",
-            href: "/program/jurusan/TKJ",
-          },
-          {
-            label: "DKV",
-            href: "/program/jurusan/DKV",
-          },
-          {
-            label: "PHT",
-            href: "/program/jurusan/PHT",
-          },
-          {
-            label: "MPLB",
-            href: "/program/jurusan/MPLB",
-          },
-          {
-            label: "PM",
-            href: "/program/jurusan/PM",
-          },
-          {
-            label: "UPW",
-            href: "/program/jurusan/UPW",
-          },
-          {
-            label: "KULINER",
-            href: "/program/jurusan/KULINER",
-          },
-          {
-            label: "BUSANA",
-            href: "/program/jurusan/BUSANA",
-          },
+          { label: "PPLG", href: "/program/jurusan/PPLG" },
+          { label: "AKL", href: "/program/jurusan/AKL" },
+          { label: "TKJ", href: "/program/jurusan/TKJ" },
+          { label: "DKV", href: "/program/jurusan/DKV" },
+          { label: "PHT", href: "/program/jurusan/PHT" },
+          { label: "MPLB", href: "/program/jurusan/MPLB" },
+          { label: "PM", href: "/program/jurusan/PM" },
+          { label: "UPW", href: "/program/jurusan/UPW" },
+          { label: "KULINER", href: "/program/jurusan/KULINER" },
+          { label: "BUSANA", href: "/program/jurusan/BUSANA" },
         ],
       },
     ],
@@ -192,11 +150,7 @@ const menuSections: MenuSection[] = [
   {
     title: "SISWA",
     items: [
-      {
-        icon: "fas fa-list",
-        label: "List Siswa",
-        href: "/siswa",
-      },
+      { icon: "fas fa-list", label: "List Siswa", href: "/siswa" },
       {
         icon: "fas fa-user-plus",
         label: "Tambah Siswa",
@@ -209,11 +163,7 @@ const menuSections: MenuSection[] = [
   {
     title: "GURU",
     items: [
-      {
-        icon: "fas fa-list",
-        label: "List Guru",
-        href: "/guru",
-      },
+      { icon: "fas fa-list", label: "List Guru", href: "/guru" },
       {
         icon: "fas fa-user-plus",
         label: "Tambah Guru",
@@ -226,11 +176,7 @@ const menuSections: MenuSection[] = [
   {
     title: "MATA PELAJARAN",
     items: [
-      {
-        icon: "fas fa-book",
-        label: "List Mapel",
-        href: "/mapel",
-      },
+      { icon: "fas fa-book", label: "List Mapel", href: "/mapel" },
       {
         icon: "fas fa-plus-circle",
         label: "Tambah Mapel",
@@ -267,6 +213,26 @@ const Sidebar = ({
   const [openSubMenus, setOpenSubMenus] = useState<{ [key: string]: boolean }>(
     {}
   );
+  const [ekstrakulikuler, setEkstrakulikuler] = useState<Ekstrakulikuler[]>([]);
+  const [loadingEskul, setLoadingEskul] = useState(true);
+
+  useEffect(() => {
+    const fetchEkstrakulikuler = async () => {
+      try {
+        const res = await fetch("/api/ekstrakulikuler?limit=100");
+        const data = await res.json();
+        if (data.success) {
+          setEkstrakulikuler(data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching ekstrakulikuler:", error);
+      } finally {
+        setLoadingEskul(false);
+      }
+    };
+
+    fetchEkstrakulikuler();
+  }, []);
 
   const toggleSubMenu = (label: string) => {
     setOpenSubMenus((prev) => ({
@@ -279,35 +245,48 @@ const Sidebar = ({
     return subItems.some((subItem) => pathname === subItem.href);
   };
 
+  const menuSectionsWithEskul = useMemo(() => {
+    return staticMenuSections.map((section) => {
+      if (section.title === "GENERAL") {
+        return {
+          ...section,
+          items: section.items.map((item) => {
+            if (item.isDynamic && item.label === "Ekstrakulikuler") {
+              const eskulSubItems: SubMenuItem[] = ekstrakulikuler.map(
+                (eskul) => ({
+                  label: eskul.namaEskul,
+                  href: `/ekstrakulikuler/${eskul.slug}`,
+                })
+              );
+
+              return {
+                ...item,
+                subItems: eskulSubItems,
+              };
+            }
+            return item;
+          }),
+        };
+      }
+      return section;
+    });
+  }, [ekstrakulikuler]);
+
   const filteredMenuSections = useMemo(() => {
-    return menuSections
+    return menuSectionsWithEskul
       .map((section) => {
         if (section.needAuth && !user) return null;
 
         const visibleItems = section.items.filter((item) => {
           if (item.needAuth && !user) return false;
-
           if (item.permission && !user) return false;
-
-          if (item.roleAccess && user) {
-            if (!item.roleAccess.includes(user.role)) return false;
-          }
-
+          if (item.roleAccess && user && !item.roleAccess.includes(user.role))
+            return false;
           if (
             item.permission &&
             !checkPermission(user?.permissions, item.permission)
-          ) {
+          )
             return false;
-          }
-
-          if (item.subItems) {
-            const visibleSubItems = item.subItems.filter((subItem) => {
-              if (subItem.permission && !user) return false;
-              return checkPermission(user?.permissions, subItem.permission);
-            });
-            return visibleSubItems.length > 0;
-          }
-
           return true;
         });
 
@@ -315,22 +294,16 @@ const Sidebar = ({
 
         return {
           ...section,
-          items: visibleItems.map((item) => {
-            if (item.subItems) {
-              return {
-                ...item,
-                subItems: item.subItems.filter((subItem) => {
-                  if (subItem.permission && !user) return false;
-                  return checkPermission(user?.permissions, subItem.permission);
-                }),
-              };
-            }
-            return item;
-          }),
+          items: visibleItems.map((item) => ({
+            ...item,
+            subItems: item.subItems?.filter((subItem) =>
+              checkPermission(user?.permissions, subItem.permission)
+            ),
+          })),
         };
       })
       .filter(Boolean) as MenuSection[];
-  }, [user]);
+  }, [user, menuSectionsWithEskul]);
 
   return (
     <>
@@ -363,40 +336,87 @@ const Sidebar = ({
               <div className={styles.menuSectionTitle}>{section.title}</div>
               {section.items.map((item, itemIndex) => (
                 <div key={itemIndex}>
-                  {item.subItems && item.subItems.length > 0 ? (
+                  {item.subItems && item.subItems.length >= 0 ? (
                     <>
-                      <div
-                        className={`${styles.menuItem} ${
-                          isSubItemActive(item.subItems) ? styles.active : ""
-                        }`}
-                        onClick={() => toggleSubMenu(item.label)}
-                      >
-                        <i className={item.icon}></i>
-                        <span>{item.label}</span>
-                        <i
-                          className={`fas fa-chevron-down ${
-                            styles.chevronIcon
-                          } ${openSubMenus[item.label] ? styles.rotated : ""}`}
-                        ></i>
-                      </div>
+                      {item.clickableParent ? (
+                        <Link
+                          href={item.href}
+                          className={`${styles.menuItem} ${
+                            pathname === item.href ? styles.active : ""
+                          }`}
+                          onClick={(e) => {
+                            if (
+                              (e.target as HTMLElement).closest(
+                                `.${styles.chevronIcon}`
+                              )
+                            ) {
+                              e.preventDefault();
+                              toggleSubMenu(item.label);
+                            }
+                          }}
+                        >
+                          <i className={item.icon}></i>
+                          <span>{item.label}</span>
+                          <i
+                            className={`fas fa-chevron-down ${
+                              styles.chevronIcon
+                            } ${
+                              openSubMenus[item.label] ? styles.rotated : ""
+                            }`}
+                          ></i>
+                        </Link>
+                      ) : (
+                        <div
+                          className={`${styles.menuItem} ${
+                            isSubItemActive(item.subItems) ? styles.active : ""
+                          }`}
+                          onClick={() => toggleSubMenu(item.label)}
+                        >
+                          <i className={item.icon}></i>
+                          <span>{item.label}</span>
+                          <i
+                            className={`fas fa-chevron-down ${
+                              styles.chevronIcon
+                            } ${
+                              openSubMenus[item.label] ? styles.rotated : ""
+                            }`}
+                          ></i>
+                        </div>
+                      )}
+
                       <div
                         className={`${styles.subMenu} ${
                           openSubMenus[item.label] ? styles.open : ""
                         }`}
                       >
-                        {item.subItems.map((subItem, subIndex) => (
-                          <Link
-                            key={subIndex}
-                            href={subItem.href}
-                            className={`${styles.subMenuItem} ${
-                              pathname === subItem.href
-                                ? styles.activeSubItem
-                                : ""
-                            }`}
-                          >
-                            <span>{subItem.label}</span>
-                          </Link>
-                        ))}
+                        {item.isDynamic && loadingEskul ? (
+                          <div className={styles.subMenuItem}>
+                            <i className="fas fa-spinner fa-spin"></i>
+                            <span>Memuat...</span>
+                          </div>
+                        ) : item.isDynamic && item.subItems?.length === 0 ? (
+                          <div className={styles.subMenuItem}>
+                            <span
+                              style={{ fontStyle: "italic", color: "#999" }}
+                            >
+                              Belum ada data
+                            </span>
+                          </div>
+                        ) : (
+                          item.subItems?.map((subItem, subIndex) => (
+                            <Link
+                              key={subIndex}
+                              href={subItem.href}
+                              className={`${styles.subMenuItem} ${
+                                pathname === subItem.href
+                                  ? styles.activeSubItem
+                                  : ""
+                              }`}
+                            >
+                              <span>{subItem.label}</span>
+                            </Link>
+                          ))
+                        )}
                       </div>
                     </>
                   ) : (

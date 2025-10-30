@@ -123,14 +123,33 @@ model StructurOrganisasi {
 }
 
 model Ekstrakulikuler {
-  id              String @id @default(uuid())
+  id              String                   @id @default(uuid())
   namaEskul       String
   pendamping      String
   ketua           String
-  description     String @db.LongText
+  description     String                   @db.LongText
   imagesThumbnail String
+  slug            String                   @unique
+  order           Int                      @default(0)
+  isActive        Boolean                  @default(true)
+  createdAt       DateTime                 @default(now())
+  updatedAt       DateTime                 @updatedAt
+  galleries       EkstrakulikulerGallery[]
 
   @@map("ekstrakulikuler")
+}
+
+model EkstrakulikulerGallery {
+  id                String          @id @default(uuid())
+  ekstrakulikulerId String
+  imagePath         String
+  caption           String?
+  order             Int             @default(0)
+  createdAt         DateTime        @default(now())
+  ekstrakulikuler   Ekstrakulikuler @relation(fields: [ekstrakulikulerId], references: [id], onDelete: Cascade)
+
+  @@index([ekstrakulikulerId])
+  @@map("ekstrakulikuler_gallery")
 }
 
 model Permission {

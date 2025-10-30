@@ -1,0 +1,277 @@
+.detailContainer {
+  padding: 30px;
+}
+
+.contentWrapper {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.gallerySection {
+  padding: 30px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.gallerySectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.sectionTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.btnManageGallery {
+  padding: 10px 20px;
+  background-color: #26a7b8;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btnManageGallery:hover {
+  background-color: #1e8a98;
+  box-shadow: 0 4px 12px rgba(38, 167, 184, 0.3);
+}
+
+.galleryContainer {
+  width: 100%;
+}
+
+.mainImageContainer {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #f3f4f6;
+  margin-bottom: 20px;
+}
+
+.mainImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.imageCaption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  color: white;
+  padding: 20px;
+  font-size: 16px;
+  text-align: center;
+}
+
+.navigationButtons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.btnNav {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: none;
+  background-color: #26a7b8;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btnNav:hover {
+  background-color: #1e8a98;
+  transform: scale(1.1);
+}
+
+.slideCounter {
+  font-size: 16px;
+  font-weight: 600;
+  color: #666;
+  min-width: 80px;
+  text-align: center;
+}
+
+.thumbnailsContainer {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 10px 0;
+}
+
+.thumbnailsContainer::-webkit-scrollbar {
+  height: 6px;
+}
+
+.thumbnailsContainer::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.thumbnailsContainer::-webkit-scrollbar-thumb {
+  background: #26a7b8;
+  border-radius: 3px;
+}
+
+.thumbnail {
+  flex: 0 0 120px;
+  height: 80px;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.thumbnail:hover {
+  border-color: #26a7b8;
+  transform: scale(1.05);
+}
+
+.thumbnail.activeThumbnail {
+  border-color: #26a7b8;
+  box-shadow: 0 0 0 2px rgba(38, 167, 184, 0.2);
+}
+
+.thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.noGallery {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: #9ca3af;
+}
+
+.noGallery i {
+  font-size: 64px;
+  margin-bottom: 20px;
+}
+
+.noGallery p {
+  font-size: 16px;
+  margin: 0 0 20px 0;
+}
+
+.infoSection {
+  padding: 30px;
+}
+
+.eskulName {
+  font-size: 32px;
+  font-weight: 700;
+  color: #26a7b8;
+  margin: 0 0 25px 0;
+  padding-bottom: 15px;
+  border-bottom: 3px solid #26a7b8;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.infoItem {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.infoLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.infoValue {
+  font-size: 16px;
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.descriptionSection {
+  margin-top: 30px;
+}
+
+.descriptionLabel {
+  font-size: 16px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 10px;
+}
+
+.description {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #4b5563;
+  text-align: justify;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+@media (max-width: 768px) {
+  .detailContainer {
+    padding: 20px;
+  }
+
+  .gallerySection,
+  .infoSection {
+    padding: 20px;
+  }
+
+  .mainImageContainer {
+    height: 300px;
+  }
+
+  .eskulName {
+    font-size: 24px;
+  }
+
+  .infoGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .gallerySectionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .btnManageGallery {
+    width: 100%;
+    justify-content: center;
+  }
+}
