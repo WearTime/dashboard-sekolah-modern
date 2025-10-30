@@ -199,3 +199,75 @@ enum RecipientType {
   Sekolah
   GTK
 }
+
+model Jurusan {
+  kode         String   @id
+  nama         String
+  nama_lengkap String
+  deskripsi    String?  @db.LongText
+  image        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  ProgramJurusan ProgramJurusan[]
+
+  @@map("jurusan")
+}
+
+model ProgramSekolah {
+  id           String      @id @default(uuid())
+  judul        String
+  deskripsi    String      @db.LongText
+  tipe_program TipeProgram
+  thumbnail    String
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  ProgramJurusan  ProgramJurusan[]
+  KegiatanProgram KegiatanProgram[]
+
+  @@map("program_sekolah")
+}
+
+enum TipeProgram {
+  Kurikulum
+  Sarpras
+  Siswa
+  Humas
+}
+
+model ProgramJurusan {
+  id           String   @id @default(uuid())
+  kode_jurusan String
+  program_id   String?
+  judul        String
+  deskripsi    String   @db.LongText
+  thumbnail    String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  jurusan         Jurusan           @relation(fields: [kode_jurusan], references: [kode], onDelete: Cascade)
+  programSekolah  ProgramSekolah?   @relation(fields: [program_id], references: [id], onDelete: Cascade)
+  KegiatanProgram KegiatanProgram[]
+
+  @@map("program_jurusan")
+}
+
+model KegiatanProgram {
+  id                 String   @id @default(uuid())
+  program_id         String?
+  program_jurusan_id String?
+  nama_kegiatan      String
+  deskripsi          String   @db.LongText
+  tanggal            DateTime @db.Date
+  lokasi             String?
+  peserta            String?
+  images             String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  programSekolah ProgramSekolah? @relation(fields: [program_id], references: [id], onDelete: Cascade)
+  programJurusan ProgramJurusan? @relation(fields: [program_jurusan_id], references: [id], onDelete: Cascade)
+
+  @@map("kegiatan_program")
+}

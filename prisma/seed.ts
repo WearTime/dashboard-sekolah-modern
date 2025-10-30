@@ -264,19 +264,6 @@ const expandPatterns = (patterns: string[], allNames: string[]): string[] => {
   return Array.from(out);
 };
 
-async function main() {
-  console.log("Starting seed...");
-
-  await userSeed();
-  await siswaSeed();
-  await guruSeed();
-  await mapelSeed();
-  await guruAndMapelSeed();
-  await permissionsSeed();
-
-  console.log("🎉 Seed completed!");
-}
-
 const userSeed = async () => {
   const hashedPassword = await bcrypt.hash("admin123", 10);
 
@@ -797,6 +784,172 @@ const permissionsSeed = async () => {
   console.log("✅ permissionSeed finished.");
 };
 
+const jurusanSeed = async () => {
+  const jurusanData = [
+    {
+      kode: "PPLG",
+      nama: "PPLG",
+      nama_lengkap: "Pengembangan Perangkat Lunak dan Gim",
+      deskripsi:
+        "Program keahlian yang mempelajari pengembangan perangkat lunak, aplikasi mobile, web development, dan game development",
+      image: null,
+    },
+    {
+      kode: "AKL",
+      nama: "AKL",
+      nama_lengkap: "Akuntansi dan Keuangan Lembaga",
+      deskripsi:
+        "Program keahlian yang mempelajari akuntansi, perpajakan, dan manajemen keuangan lembaga",
+      image: null,
+    },
+    {
+      kode: "TKJ",
+      nama: "TKJ",
+      nama_lengkap: "Teknik Komputer dan Jaringan",
+      deskripsi:
+        "Program keahlian yang mempelajari instalasi, konfigurasi, dan maintenance jaringan komputer",
+      image: null,
+    },
+    {
+      kode: "DKV",
+      nama: "DKV",
+      nama_lengkap: "Desain Komunikasi Visual",
+      deskripsi:
+        "Program keahlian yang mempelajari desain grafis, multimedia, dan komunikasi visual",
+      image: null,
+    },
+    {
+      kode: "PHT",
+      nama: "PHT",
+      nama_lengkap: "Pengolahan Hasil Tani",
+      deskripsi:
+        "Program keahlian yang mempelajari pengolahan dan pengemasan hasil pertanian",
+      image: null,
+    },
+    {
+      kode: "MPLB",
+      nama: "MPLB",
+      nama_lengkap: "Manajemen Perkantoran dan Layanan Bisnis",
+      deskripsi:
+        "Program keahlian yang mempelajari administrasi perkantoran dan layanan bisnis",
+      image: null,
+    },
+    {
+      kode: "PM",
+      nama: "PM",
+      nama_lengkap: "Pemasaran",
+      deskripsi:
+        "Program keahlian yang mempelajari strategi pemasaran dan penjualan produk",
+      image: null,
+    },
+    {
+      kode: "UPW",
+      nama: "UPW",
+      nama_lengkap: "Usaha Perjalanan Wisata",
+      deskripsi:
+        "Program keahlian yang mempelajari manajemen perjalanan wisata dan pariwisata",
+      image: null,
+    },
+    {
+      kode: "KULINER",
+      nama: "KULINER",
+      nama_lengkap: "Kuliner",
+      deskripsi:
+        "Program keahlian yang mempelajari seni memasak dan manajemen usaha kuliner",
+      image: null,
+    },
+    {
+      kode: "BUSANA",
+      nama: "BUSANA",
+      nama_lengkap: "Tata Busana",
+      deskripsi:
+        "Program keahlian yang mempelajari desain dan pembuatan busana",
+      image: null,
+    },
+  ];
+
+  for (const jurusan of jurusanData) {
+    await prisma.jurusan.upsert({
+      where: { kode: jurusan.kode },
+      update: {},
+      create: jurusan,
+    });
+    console.log(`✅ Jurusan ${jurusan.nama} created`);
+  }
+};
+
+const programSekolahSeed = async () => {
+  const programKurikulum = await prisma.programSekolah.upsert({
+    where: { id: "prog-kurikulum-1" },
+    update: {},
+    create: {
+      id: "prog-kurikulum-1",
+      judul: "Kurikulum Merdeka",
+      deskripsi:
+        "Implementasi Kurikulum Merdeka di SMK N 4 Bandar Lampung yang berfokus pada pengembangan kompetensi siswa melalui pembelajaran berbasis projek dan portofolio. Program ini dirancang untuk memberikan kebebasan kepada siswa dalam mengeksplorasi minat dan bakatnya.",
+      tipe_program: "Kurikulum",
+      thumbnail: "",
+    },
+  });
+  console.log("✅ Program Kurikulum created:", programKurikulum);
+
+  const programSarpras = await prisma.programSekolah.upsert({
+    where: { id: "prog-sarpras-1" },
+    update: {},
+    create: {
+      id: "prog-sarpras-1",
+      judul: "Pengembangan Sarana dan Prasarana",
+      deskripsi:
+        "Program pengembangan dan peningkatan kualitas sarana prasarana sekolah untuk mendukung kegiatan pembelajaran yang optimal. Meliputi renovasi gedung, pengadaan peralatan laboratorium, dan digitalisasi sistem administrasi sekolah.",
+      tipe_program: "Sarpras",
+      thumbnail: "",
+    },
+  });
+  console.log("✅ Program Sarpras created:", programSarpras);
+
+  const programSiswa = await prisma.programSekolah.upsert({
+    where: { id: "prog-siswa-1" },
+    update: {},
+    create: {
+      id: "prog-siswa-1",
+      judul: "Pengembangan Karakter Siswa",
+      deskripsi:
+        "Program pembinaan karakter dan soft skills siswa melalui berbagai kegiatan ekstrakurikuler, leadership training, dan program pengembangan diri. Bertujuan untuk membentuk siswa yang berakhlak mulia, mandiri, dan berprestasi.",
+      tipe_program: "Siswa",
+      thumbnail: "",
+    },
+  });
+  console.log("✅ Program Siswa created:", programSiswa);
+
+  const programHumas = await prisma.programSekolah.upsert({
+    where: { id: "prog-humas-1" },
+    update: {},
+    create: {
+      id: "prog-humas-1",
+      judul: "Kerjasama Industri dan Hubungan Masyarakat",
+      deskripsi:
+        "Program pengembangan kerjasama dengan dunia industri dan dunia kerja (IDUKA) untuk meningkatkan relevansi pembelajaran dengan kebutuhan industri. Meliputi program magang, teaching factory, dan sertifikasi kompetensi.",
+      tipe_program: "Humas",
+      thumbnail: "",
+    },
+  });
+  console.log("✅ Program Humas created:", programHumas);
+};
+
+async function main() {
+  console.log("Starting seed...");
+
+  await userSeed();
+  await siswaSeed();
+  await guruSeed();
+  await mapelSeed();
+  await guruAndMapelSeed();
+  await permissionsSeed();
+  await jurusanSeed();
+  await programSekolahSeed();
+
+  console.log("🎉 Seed completed!");
+}
 main()
   .catch((e) => {
     console.error("❌ Seed failed:", e);
