@@ -371,7 +371,7 @@ const DashboardCharts = () => {
                 <XAxis dataKey="name" />
                 <YAxis />
                 <Tooltip />
-                <Bar dataKey="value" fill="#8b5cf6">
+                <Bar dataKey="value" fill="#8b5cf6" name="Jumlah Siswa">
                   {kelasData.map((entry, index) => (
                     <Cell
                       key={`cell-${index}`}
