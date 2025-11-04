@@ -22,8 +22,12 @@ export async function POST(request: NextRequest) {
     }
 
     const hasCreatePermission = await hasAnyPermission(user.id, [
-      "prestasi.siswa.create",
-      "prestasi.sekolah.create",
+      "prestasi.siswa.provinsi.create",
+      "prestasi.siswa.nasional.create",
+      "prestasi.siswa.internasional.create",
+      "prestasi.sekolah.provinsi.create",
+      "prestasi.sekolah.nasional.create",
+      "prestasi.sekolah.internasional.create",
       "prestasi.gtk.provinsi.create",
       "prestasi.gtk.nasional.create",
       "prestasi.gtk.internasional.create",
@@ -119,8 +123,12 @@ export async function DELETE(request: NextRequest) {
     }
 
     const hasDeletePermission = await hasAnyPermission(user.id, [
-      "prestasi.siswa.delete",
-      "prestasi.sekolah.delete",
+      "prestasi.siswa.provinsi.delete",
+      "prestasi.siswa.nasional.delete",
+      "prestasi.siswa.internasional.delete",
+      "prestasi.sekolah.provinsi.delete",
+      "prestasi.sekolah.nasional.delete",
+      "prestasi.sekolah.internasional.delete",
       "prestasi.gtk.provinsi.delete",
       "prestasi.gtk.nasional.delete",
       "prestasi.gtk.internasional.delete",

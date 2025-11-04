@@ -89,9 +89,11 @@ export async function POST(request: NextRequest) {
 
     let permissionName = "";
     if (recipient_type === "Siswa") {
-      permissionName = "prestasi.siswa.create";
+      const levelLower = level.toLowerCase();
+      permissionName = `prestasi.siswa.${levelLower}.create`;
     } else if (recipient_type === "Sekolah") {
-      permissionName = "prestasi.sekolah.create";
+      const levelLower = level.toLowerCase();
+      permissionName = `prestasi.sekolah.${levelLower}.create`;
     } else if (recipient_type === "GTK") {
       const levelLower = level.toLowerCase();
       permissionName = `prestasi.gtk.${levelLower}.create`;

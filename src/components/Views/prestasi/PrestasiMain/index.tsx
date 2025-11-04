@@ -53,8 +53,8 @@ const PrestasiMain = ({ user, prestasiType, level }: PrestasiMainProps) => {
   }, [viewMode, prestasiType, level]);
 
   const handleAddClick = () => {
-    const typeParam = prestasiType;
-    const levelParam = level ? `&level=${level}` : "";
+    const typeParam = prestasiType.toLowerCase();
+    const levelParam = level ? `&level=${level.toLowerCase()}` : "";
     router.push(`/prestasi/tambah?type=${typeParam}${levelParam}`);
   };
 

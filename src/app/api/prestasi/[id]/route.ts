@@ -53,9 +53,11 @@ export async function PUT(
 
     let permissionName = "";
     if (recipient_type === "Siswa") {
-      permissionName = "prestasi.siswa.edit";
+      const levelLower = level.toLowerCase();
+      permissionName = `prestasi.siswa.${levelLower}.edit`;
     } else if (recipient_type === "Sekolah") {
-      permissionName = "prestasi.sekolah.edit";
+      const levelLower = level.toLowerCase();
+      permissionName = `prestasi.sekolah.${levelLower}.edit`;
     } else if (recipient_type === "GTK") {
       const levelLower = level.toLowerCase();
       permissionName = `prestasi.gtk.${levelLower}.edit`;
@@ -130,9 +132,11 @@ export async function DELETE(
 
     let permissionName = "";
     if (prestasi.recipient_type === "Siswa") {
-      permissionName = "prestasi.siswa.delete";
+      const levelLower = prestasi.level.toLowerCase();
+      permissionName = `prestasi.siswa.${levelLower}.delete`;
     } else if (prestasi.recipient_type === "Sekolah") {
-      permissionName = "prestasi.sekolah.delete";
+      const levelLower = prestasi.level.toLowerCase();
+      permissionName = `prestasi.sekolah.${levelLower}.delete`;
     } else if (prestasi.recipient_type === "GTK") {
       const levelLower = prestasi.level.toLowerCase();
       permissionName = `prestasi.gtk.${levelLower}.delete`;

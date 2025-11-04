@@ -99,16 +99,29 @@ const staticMenuSections: MenuSection[] = [
         icon: "fas fa-trophy",
         label: "Siswa",
         href: "/prestasi/siswa",
+        clickableParent: true,
+        subItems: [
+          { label: "Provinsi", href: "/prestasi/siswa/provinsi" },
+          { label: "Nasional", href: "/prestasi/siswa/nasional" },
+          { label: "Internasional", href: "/prestasi/siswa/internasional" },
+        ],
       },
       {
         icon: "fas fa-award",
         label: "Sekolah",
         href: "/prestasi/sekolah",
+        clickableParent: true,
+        subItems: [
+          { label: "Provinsi", href: "/prestasi/sekolah/provinsi" },
+          { label: "Nasional", href: "/prestasi/sekolah/nasional" },
+          { label: "Internasional", href: "/prestasi/sekolah/internasional" },
+        ],
       },
       {
         icon: "fas fa-star",
         label: "GTK",
         href: "/prestasi/gtk",
+        clickableParent: true,
         subItems: [
           { label: "Provinsi", href: "/prestasi/gtk/provinsi" },
           { label: "Nasional", href: "/prestasi/gtk/nasional" },

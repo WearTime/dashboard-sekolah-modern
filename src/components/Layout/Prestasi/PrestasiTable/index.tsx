@@ -52,12 +52,13 @@ const PrestasiTable = ({
     if (!user || !user.permissions) return false;
 
     let permissionPrefix = "";
+    const levelLower = item.level.toLowerCase();
+
     if (item.recipient_type === "Siswa") {
-      permissionPrefix = "prestasi.siswa";
+      permissionPrefix = `prestasi.siswa.${levelLower}`;
     } else if (item.recipient_type === "Sekolah") {
-      permissionPrefix = "prestasi.sekolah";
+      permissionPrefix = `prestasi.sekolah.${levelLower}`;
     } else if (item.recipient_type === "GTK") {
-      const levelLower = item.level.toLowerCase();
       permissionPrefix = `prestasi.gtk.${levelLower}`;
     }
 
@@ -75,12 +76,13 @@ const PrestasiTable = ({
     if (!user || !user.permissions) return false;
 
     let permissionName = "";
+    const levelLower = item.level.toLowerCase();
+
     if (item.recipient_type === "Siswa") {
-      permissionName = "prestasi.siswa.edit";
+      permissionName = `prestasi.siswa.${levelLower}.edit`;
     } else if (item.recipient_type === "Sekolah") {
-      permissionName = "prestasi.sekolah.edit";
+      permissionName = `prestasi.sekolah.${levelLower}.edit`;
     } else if (item.recipient_type === "GTK") {
-      const levelLower = item.level.toLowerCase();
       permissionName = `prestasi.gtk.${levelLower}.edit`;
     }
 
@@ -91,12 +93,13 @@ const PrestasiTable = ({
     if (!user || !user.permissions) return false;
 
     let permissionName = "";
+    const levelLower = item.level.toLowerCase();
+
     if (item.recipient_type === "Siswa") {
-      permissionName = "prestasi.siswa.delete";
+      permissionName = `prestasi.siswa.${levelLower}.delete`;
     } else if (item.recipient_type === "Sekolah") {
-      permissionName = "prestasi.sekolah.delete";
+      permissionName = `prestasi.sekolah.${levelLower}.delete`;
     } else if (item.recipient_type === "GTK") {
-      const levelLower = item.level.toLowerCase();
       permissionName = `prestasi.gtk.${levelLower}.delete`;
     }
 

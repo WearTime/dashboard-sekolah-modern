@@ -53,18 +53,18 @@ export async function generateMetadata({ params }: PageProps) {
     return { title: "Halaman tidak ditemukan" };
   }
 
-  if (type === "gtk" && level && validLevels.includes(level as LevelType)) {
+  if (level && validLevels.includes(level as LevelType)) {
     return {
-      title: `Prestasi GTK ${
+      title: `Prestasi ${typeLabels[type as PrestasiType]} ${
         levelLabels[level as LevelType]
       } - SMK N 4 Bandar Lampung`,
-      description: `Prestasi GTK tingkat ${
+      description: `Prestasi ${typeLabels[type as PrestasiType]} tingkat ${
         levelLabels[level as LevelType]
       } sistem manajemen sekolah`,
     };
   }
 
-  if (type === "gtk" && level) {
+  if (level && !validLevels.includes(level as LevelType)) {
     return { title: "Halaman tidak ditemukan" };
   }
 
@@ -101,14 +101,28 @@ export default async function PrestasiPage({
   if (type === "tambah") {
     if (!user) redirect("/login");
 
-    const recipient_type = queryType || " ";
+    const recipient_type = queryType || "";
     const recipient_level = queryLevel;
 
     let permissionName = "";
     if (recipient_type === "siswa") {
-      permissionName = "prestasi.siswa.create";
+      if (
+        recipient_level &&
+        validLevels.includes(recipient_level as LevelType)
+      ) {
+        permissionName = `prestasi.siswa.${recipient_level}.create`;
+      } else {
+        permissionName = "prestasi.siswa.create";
+      }
     } else if (recipient_type === "sekolah") {
-      permissionName = "prestasi.sekolah.create";
+      if (
+        recipient_level &&
+        validLevels.includes(recipient_level as LevelType)
+      ) {
+        permissionName = `prestasi.sekolah.${recipient_level}.create`;
+      } else {
+        permissionName = "prestasi.sekolah.create";
+      }
     } else if (recipient_type === "gtk") {
       if (
         recipient_level &&
@@ -128,9 +142,7 @@ export default async function PrestasiPage({
     return (
       <MainLayout
         pageTitle={`Tambah Prestasi ${recipient_type.toUpperCase()}${
-          recipient_type === "gtk" && recipient_level
-            ? ` (${recipient_level.toUpperCase()})`
-            : ""
+          recipient_level ? ` (${recipient_level.toUpperCase()})` : ""
         }`}
         user={user}
       >
@@ -139,47 +151,40 @@ export default async function PrestasiPage({
     );
   }
 
-  if (validTypes.includes(type as PrestasiType)) {
-    if (type === "gtk" && level) {
-      if (!validLevels.includes(level as LevelType)) notFound();
+  if (!validTypes.includes(type as PrestasiType)) {
+    notFound();
+  }
 
-      return (
-        <MainLayout
-          pageTitle={`Prestasi GTK ${levelLabels[level as LevelType]}`}
-          user={user}
-        >
-          <PrestasiMain
-            user={user}
-            prestasiType="GTK"
-            level={levelLabels[level as LevelType]}
-          />
-        </MainLayout>
-      );
+  if (level) {
+    if (!validLevels.includes(level as LevelType)) {
+      notFound();
     }
 
     return (
       <MainLayout
-        pageTitle={`Prestasi ${typeLabels[type as PrestasiType]}`}
+        pageTitle={`Prestasi ${typeLabels[type as PrestasiType]} ${
+          levelLabels[level as LevelType]
+        }`}
         user={user}
       >
         <PrestasiMain
           user={user}
           prestasiType={typeLabels[type as PrestasiType]}
+          level={levelLabels[level as LevelType]}
         />
       </MainLayout>
     );
   }
 
-  notFound();
-}
-
-export async function generateStaticParams() {
-  const params: { slug: string[] }[] = [];
-
-  params.push({ slug: [] });
-  params.push({ slug: ["tambah"] });
-  validTypes.forEach((type) => params.push({ slug: [type] }));
-  validLevels.forEach((level) => params.push({ slug: ["gtk", level] }));
-
-  return params;
+  return (
+    <MainLayout
+      pageTitle={`Prestasi ${typeLabels[type as PrestasiType]}`}
+      user={user}
+    >
+      <PrestasiMain
+        user={user}
+        prestasiType={typeLabels[type as PrestasiType]}
+      />
+    </MainLayout>
+  );
 }

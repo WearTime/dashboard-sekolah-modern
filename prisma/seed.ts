@@ -96,22 +96,48 @@ const buildPermissionList = () => {
       },
     }),
 
+    ...["provinsi", "nasional", "internasional"].flatMap((level) =>
+      generatePermissions({
+        resource: "prestasi_siswa",
+        actions: CUD,
+        prefix: `prestasi.siswa.${level}`,
+        descriptions: {
+          [PermissionAction.create]: `Create Prestasi Siswa ${level}`,
+          [PermissionAction.edit]: `Edit Prestasi Siswa ${level}`,
+          [PermissionAction.delete]: `Delete Prestasi Siswa ${level}`,
+          [PermissionAction.export]: `Export Prestasi Siswa ${level}`,
+          [PermissionAction.import]: `Import Prestasi Siswa ${level}`,
+        },
+      })
+    ),
+
     ...generatePermissions({
       resource: "prestasi_siswa",
       actions: CUD,
       prefix: "prestasi.siswa",
-      descriptions: {
-        [PermissionAction.view]: "Lihat Prestasi Siswa",
-      },
+      descriptions: {},
     }),
+
+    ...["provinsi", "nasional", "internasional"].flatMap((level) =>
+      generatePermissions({
+        resource: "prestasi_sekolah",
+        actions: CUD,
+        prefix: `prestasi.sekolah.${level}`,
+        descriptions: {
+          [PermissionAction.create]: `Create Prestasi Sekolah ${level}`,
+          [PermissionAction.edit]: `Edit Prestasi Sekolah ${level}`,
+          [PermissionAction.delete]: `Delete Prestasi Sekolah ${level}`,
+          [PermissionAction.export]: `Export Prestasi Sekolah ${level}`,
+          [PermissionAction.import]: `Import Prestasi Sekolah ${level}`,
+        },
+      })
+    ),
 
     ...generatePermissions({
       resource: "prestasi_sekolah",
       actions: CUD,
       prefix: "prestasi.sekolah",
-      descriptions: {
-        [PermissionAction.view]: "Lihat Prestasi Sekolah",
-      },
+      descriptions: {},
     }),
 
     ...["provinsi", "nasional", "internasional"].flatMap((level) =>
@@ -124,9 +150,20 @@ const buildPermissionList = () => {
           [PermissionAction.create]: `Create Prestasi GTK ${level}`,
           [PermissionAction.edit]: `Edit Prestasi GTK ${level}`,
           [PermissionAction.delete]: `Delete Prestasi GTK ${level}`,
+          [PermissionAction.export]: `Export Prestasi GTK ${level}`,
+          [PermissionAction.import]: `Import Prestasi GTK ${level}`,
         },
       })
     ),
+
+    ...generatePermissions({
+      resource: "prestasi_gtk",
+      actions: [PermissionAction.view],
+      prefix: "prestasi.gtk",
+      descriptions: {
+        [PermissionAction.view]: "Lihat Semua Prestasi GTK",
+      },
+    }),
 
     ...generatePermissions({
       resource: "kurikulum",
@@ -700,9 +737,9 @@ const permissionsSeed = async () => {
     [UserRole.PRINCIPAL]: [
       "struktur-organisasi.view",
       "ekstrakulikuler.view",
-      "prestasi.siswa.view",
-      "prestasi.sekolah.view",
-      "prestasi.gtk.*.view",
+      "prestasi.siswa.*",
+      "prestasi.sekolah.*",
+      "prestasi.gtk.*",
       "program.kurikulum.view",
       "program.sarpras.view",
       "program.siswa.view",
@@ -717,6 +754,8 @@ const permissionsSeed = async () => {
     [UserRole.TEACHER]: [
       "ekstrakulikuler.view",
       "prestasi.siswa.view",
+      "prestasi.siswa.*.view",
+      "prestasi.sekolah.view",
       "prestasi.gtk.*.view",
       "program.kurikulum.view",
       "program.siswa.view",
