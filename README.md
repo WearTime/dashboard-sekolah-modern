@@ -37,7 +37,7 @@ Project ini menggunakan teknologi terkini yang keren banget:
 - **Next.js 15** - Framework React yang powerful
 - **TypeScript** - Untuk code yang lebih aman dan terstruktur
 - **Poppins Font** - Font modern dari Vercel
-- **Prisma ORM** — Si penyihir data yang membuat akses database terasa simpel, cepat, dan aman
+- **Prisma ORM** - Si penyihir data yang membuat akses database terasa simpel, cepat, dan aman
 
 ## 🚀 Cara Memulai
 
