@@ -4,7 +4,7 @@
 
 ![Kita Ikuyo](https://media1.tenor.com/m/BL3FST8k-48AAAAd/kita-ikuyo-ikuyo-kita.gif)
 
-*"Kalau kamu butuh bantuan dengan dashboard ini, aku pasti akan bantu! 💕"*
+_"Kalau kamu butuh bantuan dengan dashboard ini, aku pasti akan bantu! 💕"_
 
 **Dashboard sekolah yang cerah dan modern, seperti energi Kita-chan!**
 
@@ -38,7 +38,7 @@ Project ini menggunakan teknologi terkini yang keren banget:
 - **TypeScript** - Untuk code yang lebih aman dan terstruktur
 - **Poppins Font** - Font modern dari Vercel
 - **Prisma ORM** — Si penyihir data yang membuat akses database terasa simpel, cepat, dan aman
-  
+
 ## 🚀 Cara Memulai
 
 Ayo kita mulai! Ikuti langkah-langkah ini dengan semangat! 💪
@@ -68,7 +68,26 @@ pnpm install
 bun install
 ```
 
-### 3. Jalankan Development Server
+### 3. Deploy Migration Prisma
+
+```bash
+# Menggunakan npx
+npx prisma migrate deploy
+
+# Menggunakan npm
+npm exec prisma migrate deploy
+
+# Menggunakan yarn
+yarn prisma migrate deploy
+
+# Menggunakan pnpm
+pnpm exec prisma migrate deploy
+
+# Menggunakan bun
+bunx prisma migrate deploy
+```
+
+### 4. Jalankan Development Server
 
 ```bash
 # Menggunakan npm
@@ -84,15 +103,15 @@ pnpm dev
 bun dev
 ```
 
-### 4. Buka di Browser
+### 5. Buka di Browser
 
 Buka [http://localhost:3000](http://localhost:3000) dan lihat hasilnya! 🎉
 
 ## 💖 Special Thanks
 
-Terima kasih sudah mengunjungi project ini! Ayo kita buat dashboard sekolah yang keren bareng-bareng! 
+Terima kasih sudah mengunjungi project ini! Ayo kita buat dashboard sekolah yang keren bareng-bareng!
 
-*"Yuk, kita buat sesuatu yang amazing bersama-sama!"* 🌟
+_"Yuk, kita buat sesuatu yang amazing bersama-sama!"_ 🌟
 
 ---
 
@@ -102,6 +121,7 @@ Terima kasih sudah mengunjungi project ini! Ayo kita buat dashboard sekolah yang
 
 🎸 **"Kalau kita berusaha bersama, pasti bisa!"** 🎸
 
+<div>
   <p>
     <a href="https://github.com/WearTime/dashboard-sekolah-modern">⭐ Star this project</a> |
     <a href="https://github.com/WearTime/dashboard-sekolah-modern/issues">🐛 Report Bug</a> |
