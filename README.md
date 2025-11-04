@@ -68,7 +68,25 @@ pnpm install
 bun install
 ```
 
-### 3. Jalankan Development Server
+### 3. Deploy Migration Prisma
+```bash
+# Menggunakan npx
+npx prisma migrate deploy
+
+# Menggunakan npm
+npm exec prisma migrate deploy
+
+# Menggunakan yarn
+yarn prisma migrate deploy
+
+# Menggunakan pnpm
+pnpm exec prisma migrate deploy
+
+# Menggunakan bun
+bunx prisma migrate deploy
+```
+
+### 4. Jalankan Development Server
 
 ```bash
 # Menggunakan npm
@@ -84,7 +102,7 @@ pnpm dev
 bun dev
 ```
 
-### 4. Buka di Browser
+### 5. Buka di Browser
 
 Buka [http://localhost:3000](http://localhost:3000) dan lihat hasilnya! 🎉
 
