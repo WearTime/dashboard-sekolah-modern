@@ -75,15 +75,6 @@ const buildPermissionList = () => {
   ];
 
   const permissions = [
-    // ...generatePermissions({
-    //   resource: "struktur_organisasi",
-    //   actions: VIEW_ONLY,
-    //   prefix: "struktur-organisasi",
-    //   descriptions: {
-    //     [PermissionAction.view]: "Lihat Struktur Organisasi",
-    //   },
-    // }),
-
     ...generatePermissions({
       resource: "ekstrakulikuler",
       actions: CUD,
@@ -158,11 +149,9 @@ const buildPermissionList = () => {
 
     ...generatePermissions({
       resource: "prestasi_gtk",
-      actions: [PermissionAction.view],
+      actions: CUD,
       prefix: "prestasi.gtk",
-      descriptions: {
-        [PermissionAction.view]: "Lihat Semua Prestasi GTK",
-      },
+      descriptions: {},
     }),
 
     ...generatePermissions({

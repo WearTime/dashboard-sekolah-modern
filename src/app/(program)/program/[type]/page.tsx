@@ -1,0 +1,50 @@
+import { notFound } from "next/navigation";
+import MainLayout from "WT/components/Layout/Main";
+import ProgramMain from "WT/components/Views/program/ProgramMain";
+import { getCurrentUser } from "WT/lib/auth";
+import { getProgramConfigByPath, PROGRAM_CONFIGS } from "WT/config/program";
+
+interface PageProps {
+  params: Promise<{ type: string }>;
+}
+
+export async function generateMetadata({ params }: PageProps) {
+  const resolvedParams = await params;
+  const config = getProgramConfigByPath(resolvedParams.type);
+
+  if (!config) {
+    return { title: "Halaman tidak ditemukan" };
+  }
+
+  return {
+    title: `${config.titleFull} - SMK N 4 Bandar Lampung`,
+    description: `${config.titleFull} sistem manajemen sekolah`,
+  };
+}
+
+export default async function ProgramPage({ params }: PageProps) {
+  const resolvedParams = await params;
+  const config = getProgramConfigByPath(resolvedParams.type);
+
+  if (!config) {
+    notFound();
+  }
+
+  const user = await getCurrentUser();
+
+  return (
+    <MainLayout pageTitle={config.titleFull} user={user}>
+      <ProgramMain
+        user={user}
+        tipeProgram={config.tipe}
+        title={config.titleFull}
+      />
+    </MainLayout>
+  );
+}
+
+export async function generateStaticParams() {
+  return Object.values(PROGRAM_CONFIGS).map((config) => ({
+    type: config.path,
+  }));
+}

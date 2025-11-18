@@ -1,0 +1,99 @@
+.infoGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.infoLabel {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #26a7b8;
+  margin: 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #26a7b8;
+}
+
+.loadingPermissions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 24px;
+  color: #64748b;
+  font-size: 14px;
+  background: #f8fafc;
+  border-radius: 8px;
+}
+
+.noPermissions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 24px;
+  background: #f8fafc;
+  border-radius: 8px;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.permissionsList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.permissionCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px;
+  transition: all 0.2s;
+}
+
+.permissionCard:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.permissionName {
+  font-weight: 600;
+  color: #1e293b;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.permissionDesc {
+  font-size: 12px;
+  color: #64748b;
+  margin-bottom: 8px;
+}
+
+.permissionMeta {
+  display: flex;
+  gap: 8px;
+}
+
+.permissionResource,
+.permissionAction {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.permissionResource {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.permissionAction {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+@media (max-width: 768px) {
+  .permissionsList {
+    grid-template-columns: 1fr;
+  }
+}

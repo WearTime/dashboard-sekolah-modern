@@ -4,6 +4,7 @@ import { Guru } from "WT/types/teacher";
 import styles from "./TeachersTable.module.css";
 import { SessionUser } from "WT/types";
 import Button from "WT/components/Ui/Button";
+import ProtectedActionButtons from "WT/components/Ui/ProtectedActionButtons";
 
 interface TeacherTableProps {
   teachers: Guru[];
@@ -147,43 +148,42 @@ const TeacherTable = ({
               </td>
               <td>{teacher.no_hp || "-"}</td>
               <td>
-                <div className={styles.actionButtons}>
-                  <Button
-                    className={`${styles.btnAction} ${styles.btnView}`}
-                    title="Lihat Detail"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onView(teacher);
-                    }}
-                  >
-                    <i className="fas fa-eye"></i>
-                  </Button>
-                  {user &&
-                    (user.role === "ADMIN" || user?.role === "PRINCIPAL") && (
-                      <>
-                        <Button
-                          className={`${styles.btnAction} ${styles.btnEdit}`}
-                          title="Edit"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onEdit(teacher);
-                          }}
-                        >
-                          <i className="fas fa-edit"></i>
-                        </Button>
-                        <Button
-                          className={`${styles.btnAction} ${styles.btnDelete}`}
-                          title="Hapus"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onDelete(teacher.nip, teacher.nama);
-                          }}
-                        >
-                          <i className="fas fa-trash"></i>
-                        </Button>
-                      </>
-                    )}
-                </div>
+                <ProtectedActionButtons
+                  user={user}
+                  actions={[
+                    {
+                      icon: "fas fa-eye",
+                      title: "Lihat Detail",
+                      onClick: (e) => {
+                        e.stopPropagation();
+                        onView(teacher);
+                      },
+                      permission: "",
+                      variant: "view",
+                      needPermission: false,
+                    },
+                    {
+                      icon: "fas fa-edit",
+                      title: "Edit",
+                      onClick: (e) => {
+                        e.stopPropagation();
+                        onEdit(teacher);
+                      },
+                      permission: "guru.edit",
+                      variant: "edit",
+                    },
+                    {
+                      icon: "fas fa-trash",
+                      title: "Hapus",
+                      onClick: (e) => {
+                        e.stopPropagation();
+                        onDelete(teacher.nip, teacher.nama);
+                      },
+                      permission: "guru.delete",
+                      variant: "delete",
+                    },
+                  ]}
+                />
               </td>
             </tr>
           ))}

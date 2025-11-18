@@ -4,6 +4,7 @@ import { ProgramJurusan, Jurusan } from "WT/types/program";
 import styles from "../ProgramTable/ProgramTable.module.css";
 import { SessionUser } from "WT/types";
 import Button from "WT/components/Ui/Button";
+import ProtectedActionButtons from "WT/components/Ui/ProtectedActionButtons";
 
 interface ProgramJurusanTableProps {
   programs: ProgramJurusan[];
@@ -28,18 +29,6 @@ const ProgramJurusanTable = ({
   user,
   jurusan,
 }: ProgramJurusanTableProps) => {
-  const canEdit = (): boolean => {
-    if (!user || !user.permissions) return false;
-    const permissionName = `program.jurusan.${jurusan.kode}.edit`;
-    return user.permissions.includes(permissionName);
-  };
-
-  const canDelete = (): boolean => {
-    if (!user || !user.permissions) return false;
-    const permissionName = `program.jurusan.${jurusan.kode}.delete`;
-    return user.permissions.includes(permissionName);
-  };
-
   if (loading) {
     return (
       <div className={styles.tableContainer}>
@@ -133,46 +122,42 @@ const ProgramJurusanTable = ({
                 </div>
               </td>
               <td>
-                <div className={styles.actionButtons}>
-                  <Button
-                    className={`${styles.btnAction} ${styles.btnView}`}
-                    title="Lihat Detail"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onView(program);
-                    }}
-                  >
-                    <i className="fas fa-eye"></i>
-                  </Button>
-                  {user && (
-                    <>
-                      {canEdit() && (
-                        <Button
-                          className={`${styles.btnAction} ${styles.btnEdit}`}
-                          title="Edit"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onEdit(program);
-                          }}
-                        >
-                          <i className="fas fa-edit"></i>
-                        </Button>
-                      )}
-                      {canDelete() && (
-                        <Button
-                          className={`${styles.btnAction} ${styles.btnDelete}`}
-                          title="Hapus"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onDelete(program.id, program.judul);
-                          }}
-                        >
-                          <i className="fas fa-trash"></i>
-                        </Button>
-                      )}
-                    </>
-                  )}
-                </div>
+                <ProtectedActionButtons
+                  user={user}
+                  actions={[
+                    {
+                      icon: "fas fa-eye",
+                      title: "Lihat Detail",
+                      onClick: (e) => {
+                        e.stopPropagation();
+                        onView(program);
+                      },
+                      permission: "",
+                      variant: "view",
+                      needPermission: false,
+                    },
+                    {
+                      icon: "fas fa-edit",
+                      title: "Edit",
+                      onClick: (e) => {
+                        e.stopPropagation();
+                        onEdit(program);
+                      },
+                      permission: `program.jurusan.${jurusan.kode.toLowerCase()}.edit`,
+                      variant: "edit",
+                    },
+                    {
+                      icon: "fas fa-trash",
+                      title: "Hapus",
+                      onClick: (e) => {
+                        e.stopPropagation();
+                        onDelete(program.id, program.judul);
+                      },
+                      permission: `program.jurusan.${jurusan.kode.toLowerCase()}.delete`,
+                      variant: "delete",
+                    },
+                  ]}
+                />
               </td>
             </tr>
           ))}

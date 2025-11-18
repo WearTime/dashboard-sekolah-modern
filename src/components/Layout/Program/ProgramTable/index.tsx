@@ -1,9 +1,10 @@
 "use client";
 
-import { ProgramSekolah } from "WT/types/program";
+import { ProgramSekolah, TipeProgram } from "WT/types/program";
 import styles from "./ProgramTable.module.css";
 import { SessionUser } from "WT/types";
 import Button from "WT/components/Ui/Button";
+import ProtectedActionButtons from "WT/components/Ui/ProtectedActionButtons";
 
 interface ProgramTableProps {
   programs: ProgramSekolah[];
@@ -14,6 +15,7 @@ interface ProgramTableProps {
   onView: (program: ProgramSekolah) => void;
   onEdit: (program: ProgramSekolah) => void;
   user: SessionUser | null | undefined;
+  tipeProgram: TipeProgram;
 }
 
 const ProgramTable = ({
@@ -25,23 +27,8 @@ const ProgramTable = ({
   onView,
   onEdit,
   user,
+  tipeProgram,
 }: ProgramTableProps) => {
-  const canEdit = (program: ProgramSekolah): boolean => {
-    if (!user || !user.permissions) return false;
-
-    const tipe = program.tipe_program.toLowerCase();
-    const permissionName = `program.${tipe}.edit`;
-    return user.permissions.includes(permissionName);
-  };
-
-  const canDelete = (program: ProgramSekolah): boolean => {
-    if (!user || !user.permissions) return false;
-
-    const tipe = program.tipe_program.toLowerCase();
-    const permissionName = `program.${tipe}.delete`;
-    return user.permissions.includes(permissionName);
-  };
-
   if (loading) {
     return (
       <div className={styles.tableContainer}>
@@ -139,46 +126,42 @@ const ProgramTable = ({
                 </div>
               </td>
               <td>
-                <div className={styles.actionButtons}>
-                  <Button
-                    className={`${styles.btnAction} ${styles.btnView}`}
-                    title="Lihat Detail"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onView(program);
-                    }}
-                  >
-                    <i className="fas fa-eye"></i>
-                  </Button>
-                  {user && (
-                    <>
-                      {canEdit(program) && (
-                        <Button
-                          className={`${styles.btnAction} ${styles.btnEdit}`}
-                          title="Edit"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onEdit(program);
-                          }}
-                        >
-                          <i className="fas fa-edit"></i>
-                        </Button>
-                      )}
-                      {canDelete(program) && (
-                        <Button
-                          className={`${styles.btnAction} ${styles.btnDelete}`}
-                          title="Hapus"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onDelete(program.id, program.judul);
-                          }}
-                        >
-                          <i className="fas fa-trash"></i>
-                        </Button>
-                      )}
-                    </>
-                  )}
-                </div>
+                <ProtectedActionButtons
+                  user={user}
+                  actions={[
+                    {
+                      icon: "fas fa-eye",
+                      title: "Lihat Detail",
+                      onClick: (e) => {
+                        e.stopPropagation();
+                        onView(program);
+                      },
+                      permission: "",
+                      variant: "view",
+                      needPermission: false,
+                    },
+                    {
+                      icon: "fas fa-edit",
+                      title: "Edit",
+                      onClick: (e) => {
+                        e.stopPropagation();
+                        onEdit(program);
+                      },
+                      permission: `program.${tipeProgram.toLowerCase()}.edit`,
+                      variant: "edit",
+                    },
+                    {
+                      icon: "fas fa-trash",
+                      title: "Hapus",
+                      onClick: (e) => {
+                        e.stopPropagation();
+                        onDelete(program.id, program.judul);
+                      },
+                      permission: `program.${tipeProgram.toLowerCase()}.delete`,
+                      variant: "delete",
+                    },
+                  ]}
+                />
               </td>
             </tr>
           ))}

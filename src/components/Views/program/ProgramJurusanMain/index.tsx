@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { SessionUser } from "WT/types";
 import { Jurusan } from "WT/types/program";
-import ProgramJurusanList from "WT/components/Views/program/ProgramJurusanList";
+import ProgramJurusanList from "WT/components/Layout/Program/ProgramJurusanList";
 import { useProgramJurusan } from "WT/hooks/useProgramJurusan";
 import ProgramJurusanSlide from "WT/components/Layout/Program/ProgramJurusanSlide";
 
@@ -62,6 +62,7 @@ const ProgramJurusanMain = ({ user, jurusan }: ProgramJurusanMainProps) => {
       onListClick={handleListClick}
       title={`Program ${jurusan.nama}`}
       jurusan={jurusan}
+      user={user}
     />
   );
 };

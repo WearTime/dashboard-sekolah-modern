@@ -114,7 +114,7 @@ const DrillDownNav = () => {
       }
 
       const queryString = params.toString();
-      console.log("Navigating to guru with params:", queryString);
+
       router.push(`/guru?${queryString}`);
     }
 
@@ -127,7 +127,7 @@ const DrillDownNav = () => {
       }
 
       const queryString = params.toString();
-      console.log("Navigating to mapel with params:", queryString);
+
       router.push(`/mapel?${queryString}`);
     }
   };
@@ -266,7 +266,7 @@ const DrillDownNav = () => {
         value: count,
         action: () => {
           const newFilters = { ...drillState.filters, jurusan };
-          console.log("Setting siswa jurusan filter:", newFilters);
+
           setDrillState({
             ...drillState,
             filters: newFilters,
@@ -284,7 +284,7 @@ const DrillDownNav = () => {
           }
 
           const queryString = params.toString();
-          console.log("Navigating to siswa with jurusan params:", queryString);
+
           router.push(`/siswa?${queryString}`);
         },
       }));
@@ -382,7 +382,7 @@ const DrillDownNav = () => {
         value: count,
         action: () => {
           const newFilters = { ...drillState.filters, golongan };
-          console.log("Setting golongan filter:", newFilters);
+
           setDrillState({
             ...drillState,
             filters: newFilters,
@@ -400,7 +400,7 @@ const DrillDownNav = () => {
           }
 
           const queryString = params.toString();
-          console.log("Navigating to guru with golongan params:", queryString);
+
           router.push(`/guru?${queryString}`);
         },
       }));
@@ -414,7 +414,7 @@ const DrillDownNav = () => {
           value: filteredStats.mapel.umum,
           action: () => {
             const newFilters = { ...drillState.filters, tipe: "Umum" as const };
-            console.log("Setting mapel Umum filter:", newFilters);
+
             setDrillState({
               ...drillState,
               filters: newFilters,
@@ -424,7 +424,7 @@ const DrillDownNav = () => {
             params.append("tipe_mapel", "Umum");
 
             const queryString = params.toString();
-            console.log("Navigating to mapel Umum with params:", queryString);
+
             router.push(`/mapel?${queryString}`);
           },
         },
@@ -452,7 +452,7 @@ const DrillDownNav = () => {
         value: count,
         action: () => {
           const newFilters = { ...drillState.filters, jurusan };
-          console.log("Setting mapel jurusan filter:", newFilters);
+
           setDrillState({
             ...drillState,
             filters: newFilters,
@@ -467,7 +467,7 @@ const DrillDownNav = () => {
           }
 
           const queryString = params.toString();
-          console.log("Navigating to mapel with jurusan params:", queryString);
+
           router.push(`/mapel?${queryString}`);
         },
       }));

@@ -32,13 +32,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (user.role !== "PRINCIPAL" && user.role !== "ADMIN") {
-      return NextResponse.json(
-        { success: false, message: "Forbidden" },
-        { status: 403 }
-      );
-    }
-
     const formData = await request.formData();
     const file = formData.get("file") as File;
 
@@ -74,7 +67,7 @@ export async function POST(request: NextRequest) {
     const randomName = crypto.randomBytes(16).toString("hex");
     const fileName = `${randomName}${fileExtension}`;
 
-    const uploadDir = path.join(process.cwd(), "public", "uploads", "guru");
+    const uploadDir = path.join(process.cwd(), "uploads", "guru");
     const filePath = path.join(uploadDir, fileName);
 
     if (!existsSync(uploadDir)) {
@@ -85,7 +78,7 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(bytes);
     await writeFile(filePath, buffer);
 
-    const relativePath = `/uploads/guru/${fileName}`;
+    const relativePath = `/api/files/guru/${fileName}`;
 
     return NextResponse.json({
       success: true,

@@ -26,13 +26,6 @@ export async function DELETE(
     );
   }
 
-  if (user.role !== "PRINCIPAL" && user.role !== "ADMIN") {
-    return NextResponse.json(
-      { success: false, message: "Forbidden" },
-      { status: 403 }
-    );
-  }
-
   try {
     await prisma.ekstrakulikulerGallery.delete({
       where: { id: galleryId },
@@ -43,7 +36,8 @@ export async function DELETE(
       message: "Foto galeri berhasil dihapus",
     });
   } catch (error) {
-    console.error("Error deleting gallery:", error);
+    console.error("Error delete ekstrakulikuler gallery:", error);
+
     return NextResponse.json(
       { success: false, message: "Gagal menghapus foto galeri" },
       { status: 500 }
@@ -91,7 +85,8 @@ export async function PUT(
       data: gallery,
     });
   } catch (error) {
-    console.error("Error updating gallery:", error);
+    console.error("Error update ekstrakulikuler gallery:", error);
+
     return NextResponse.json(
       { success: false, message: "Gagal memperbarui foto galeri" },
       { status: 500 }

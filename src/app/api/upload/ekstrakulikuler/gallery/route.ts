@@ -30,13 +30,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (user.role !== "PRINCIPAL" && user.role !== "ADMIN") {
-      return NextResponse.json(
-        { success: false, message: "Forbidden" },
-        { status: 403 }
-      );
-    }
-
     const formData = await request.formData();
     const file = formData.get("file") as File;
 
@@ -84,7 +77,6 @@ export async function POST(request: NextRequest) {
 
     const uploadDir = path.join(
       process.cwd(),
-      "public",
       "uploads",
       "ekstrakulikuler",
       "gallery"
@@ -99,7 +91,7 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(bytes);
     await writeFile(filePath, buffer);
 
-    const relativePath = `/uploads/ekstrakulikuler/gallery/${fileName}`;
+    const relativePath = `/api/files/ekstrakulikuler/gallery/${fileName}`;
 
     return NextResponse.json({
       success: true,

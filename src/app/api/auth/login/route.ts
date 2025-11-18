@@ -71,11 +71,11 @@ export async function POST(request: NextRequest) {
     );
   } catch (error: unknown) {
     if (error instanceof ZodError) {
-      return NextResponse.json<ApiResponse>(
+      return NextResponse.json(
         {
           success: false,
-          message: "Validasi gagal",
-          error: error.issues[0]?.message,
+          message: error.issues?.[0]?.message || "Validasi gagal",
+          errors: error.issues,
         },
         { status: 400 }
       );

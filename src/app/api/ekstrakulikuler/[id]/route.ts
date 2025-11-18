@@ -28,7 +28,6 @@ export async function GET(
 
     return NextResponse.json({ success: true, data: ekstrakulikuler });
   } catch (error) {
-    console.error("Error fetching ekstrakulikuler:", error);
     return NextResponse.json(
       { success: false, message: "Gagal mengambil data ekstrakulikuler" },
       { status: 500 }
@@ -65,18 +64,6 @@ export async function PUT(
     );
   }
 
-  if (user.role !== "PRINCIPAL" && user.role !== "ADMIN") {
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Forbidden",
-      },
-      {
-        status: 403,
-      }
-    );
-  }
-
   try {
     const body = await request.json();
 
@@ -97,7 +84,8 @@ export async function PUT(
       data: ekstrakulikuler,
     });
   } catch (error) {
-    console.error("Error updating ekstrakulikuler:", error);
+    console.error("Error fetching ekstrakulikuler:", error);
+
     return NextResponse.json(
       { success: false, message: "Gagal memperbarui data ekstrakulikuler" },
       { status: 500 }
@@ -134,18 +122,6 @@ export async function DELETE(
     );
   }
 
-  if (user.role !== "PRINCIPAL" && user.role !== "ADMIN") {
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Forbidden",
-      },
-      {
-        status: 403,
-      }
-    );
-  }
-
   try {
     await prisma.ekstrakulikuler.delete({
       where: { id },
@@ -156,7 +132,8 @@ export async function DELETE(
       message: "Data ekstrakulikuler berhasil dihapus",
     });
   } catch (error) {
-    console.error("Error deleting ekstrakulikuler:", error);
+    console.error("Error delete ekstrakulikuler:", error);
+
     return NextResponse.json(
       { success: false, message: "Gagal menghapus data ekstrakulikuler" },
       { status: 500 }

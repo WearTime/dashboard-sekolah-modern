@@ -1,19 +1,23 @@
 "use client";
 
-import { ProgramSekolah } from "WT/types/program";
+import { ProgramSekolah, TipeProgram } from "WT/types/program";
 import styles from "./ProgramSlide.module.css";
 import Button from "WT/components/Ui/Button";
+import ProtectedComponent from "WT/components/Ui/ProtectedComponent";
+import { SessionUser } from "WT/types";
 
 interface SlideViewProps {
   programs: ProgramSekolah[];
   loading: boolean;
   currentSlide: number;
   onNext: () => void;
+  user: SessionUser | null | undefined;
   onPrev: () => void;
   onSlideChange: (index: number) => void;
   onAddClick: () => void;
   onListClick: () => void;
   title: string;
+  tipeProgram: TipeProgram;
 }
 
 const ProgramSlide = ({
@@ -24,19 +28,30 @@ const ProgramSlide = ({
   onPrev,
   onSlideChange,
   onAddClick,
+  user,
   onListClick,
   title,
+  tipeProgram,
 }: SlideViewProps) => {
+  const buildCreatePermission = () => {
+    const tipe = tipeProgram.toLowerCase();
+    return `program.${tipe}.create`;
+  };
   if (loading) {
     return (
       <div className={styles.slideContainer}>
         <div className={styles.header}>
           <h5 className={styles.title}>{title}</h5>
           <div className={styles.headerActions}>
-            <Button className={styles.btnAdd} onClick={onAddClick}>
-              <i className="fas fa-plus"></i>
-              <span>Tambah</span>
-            </Button>
+            <ProtectedComponent
+              user={user}
+              permission={buildCreatePermission()}
+            >
+              <Button className={styles.btnAdd} onClick={onAddClick}>
+                <i className="fas fa-plus"></i>
+                <span>Tambah</span>
+              </Button>
+            </ProtectedComponent>
             <Button className={styles.btnList} onClick={onListClick}>
               <i className="fas fa-list"></i>
               <span>List</span>
@@ -57,10 +72,15 @@ const ProgramSlide = ({
         <div className={styles.header}>
           <h5 className={styles.title}>{title}</h5>
           <div className={styles.headerActions}>
-            <Button className={styles.btnAdd} onClick={onAddClick}>
-              <i className="fas fa-plus"></i>
-              <span>Tambah</span>
-            </Button>
+            <ProtectedComponent
+              user={user}
+              permission={buildCreatePermission()}
+            >
+              <Button className={styles.btnAdd} onClick={onAddClick}>
+                <i className="fas fa-plus"></i>
+                <span>Tambah</span>
+              </Button>
+            </ProtectedComponent>
             <Button className={styles.btnList} onClick={onListClick}>
               <i className="fas fa-list"></i>
               <span>List</span>
@@ -83,10 +103,12 @@ const ProgramSlide = ({
       <div className={styles.header}>
         <h5 className={styles.title}>{title}</h5>
         <div className={styles.headerActions}>
-          <Button className={styles.btnAdd} onClick={onAddClick}>
-            <i className="fas fa-plus"></i>
-            <span>Tambah</span>
-          </Button>
+          <ProtectedComponent user={user} permission={buildCreatePermission()}>
+            <Button className={styles.btnAdd} onClick={onAddClick}>
+              <i className="fas fa-plus"></i>
+              <span>Tambah</span>
+            </Button>
+          </ProtectedComponent>
           <Button className={styles.btnList} onClick={onListClick}>
             <i className="fas fa-list"></i>
             <span>List</span>

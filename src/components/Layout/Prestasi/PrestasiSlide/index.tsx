@@ -4,9 +4,12 @@ import { Prestasi } from "WT/types/prestasi";
 import styles from "./PrestasiSlide.module.css";
 import Button from "WT/components/Ui/Button";
 import { useState } from "react";
+import ProtectedComponent from "WT/components/Ui/ProtectedComponent";
+import { SessionUser } from "WT/types";
 
 interface SlideViewProps {
   prestasi: Prestasi[];
+  user: SessionUser | null | undefined;
   loading: boolean;
   onAddClick: () => void;
   onListClick: () => void;
@@ -17,6 +20,7 @@ interface SlideViewProps {
 const SlideView = ({
   prestasi,
   loading,
+  user,
   onAddClick,
   onListClick,
   prestasiType,
@@ -65,16 +69,28 @@ const SlideView = ({
     return "";
   };
 
+  const buildCreatePermission = () => {
+    const recipient = prestasiType.toLowerCase();
+    const lvl = level ? "." + level.toLowerCase() : "";
+
+    return `prestasi.${recipient}${lvl}.create`;
+  };
+
   if (loading) {
     return (
       <div className={styles.slideContainer}>
         <div className={styles.header}>
           <h5 className={styles.title}>{getTitle()} - 1 Bulan Terakhir</h5>
           <div className={styles.headerActions}>
-            <Button className={styles.btnAdd} onClick={onAddClick}>
-              <i className="fas fa-plus"></i>
-              <span>Tambah</span>
-            </Button>
+            <ProtectedComponent
+              user={user}
+              permission={buildCreatePermission()}
+            >
+              <Button className={styles.btnAdd} onClick={onAddClick}>
+                <i className="fas fa-plus"></i>
+                <span>Tambah</span>
+              </Button>
+            </ProtectedComponent>
             <Button className={styles.btnList} onClick={onListClick}>
               <i className="fas fa-list"></i>
               <span>List</span>
@@ -95,10 +111,15 @@ const SlideView = ({
         <div className={styles.header}>
           <h5 className={styles.title}>{getTitle()} - 1 Bulan Terakhir</h5>
           <div className={styles.headerActions}>
-            <Button className={styles.btnAdd} onClick={onAddClick}>
-              <i className="fas fa-plus"></i>
-              <span>Tambah</span>
-            </Button>
+            <ProtectedComponent
+              user={user}
+              permission={buildCreatePermission()}
+            >
+              <Button className={styles.btnAdd} onClick={onAddClick}>
+                <i className="fas fa-plus"></i>
+                <span>Tambah</span>
+              </Button>
+            </ProtectedComponent>
             <Button className={styles.btnList} onClick={onListClick}>
               <i className="fas fa-list"></i>
               <span>List</span>
@@ -121,10 +142,12 @@ const SlideView = ({
       <div className={styles.header}>
         <h5 className={styles.title}>{getTitle()} - 1 Bulan Terakhir</h5>
         <div className={styles.headerActions}>
-          <Button className={styles.btnAdd} onClick={onAddClick}>
-            <i className="fas fa-plus"></i>
-            <span>Tambah</span>
-          </Button>
+          <ProtectedComponent user={user} permission={buildCreatePermission()}>
+            <Button className={styles.btnAdd} onClick={onAddClick}>
+              <i className="fas fa-plus"></i>
+              <span>Tambah</span>
+            </Button>
+          </ProtectedComponent>
           <Button className={styles.btnList} onClick={onListClick}>
             <i className="fas fa-list"></i>
             <span>List</span>

@@ -69,18 +69,6 @@ export async function PUT(
     );
   }
 
-  if (user.role != "PRINCIPAL" && user.role != "ADMIN") {
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Forbidden",
-      },
-      {
-        status: 403,
-      }
-    );
-  }
-
   try {
     const body = await request.json();
     const { guru_nips, ...mapelData } = body;
@@ -162,18 +150,6 @@ export async function DELETE(
         message: "Forbidden",
       },
       { status: 403 }
-    );
-  }
-
-  if (user.role != "PRINCIPAL" && user.role != "ADMIN") {
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Forbidden",
-      },
-      {
-        status: 403,
-      }
     );
   }
 

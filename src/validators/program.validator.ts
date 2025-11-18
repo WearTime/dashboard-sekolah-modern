@@ -15,7 +15,7 @@ export const programSekolahSchema = z.object({
   thumbnail: z
     .string()
     .regex(
-      /^\/uploads\/program\/[a-f0-9]{32}\.(jpg|jpeg|png|webp)$/i,
+      /^\/api\/files\/program\/[a-f0-9]{32}\.(jpg|jpeg|png|webp)$/i,
       "Format path image tidak valid"
     )
     .optional()
@@ -45,7 +45,7 @@ export const programJurusanSchema = z.object({
   thumbnail: z
     .string()
     .regex(
-      /^\/uploads\/program-jurusan\/[a-f0-9]{32}\.(jpg|jpeg|png|webp)$/i,
+      /^\/api\/files\/program-jurusan\/[a-f0-9]{32}\.(jpg|jpeg|png|webp)$/i,
       "Format path image tidak valid"
     )
     .optional()
@@ -73,7 +73,7 @@ export const kegiatanProgramSchema = z.object({
   images: z
     .string()
     .regex(
-      /^\/uploads\/kegiatan\/[a-f0-9]{32}\.(jpg|jpeg|png|webp)$/i,
+      /^\/api\/files\/kegiatan\/[a-f0-9]{32}\.(jpg|jpeg|png|webp)$/i,
       "Format path image tidak valid"
     )
     .optional()

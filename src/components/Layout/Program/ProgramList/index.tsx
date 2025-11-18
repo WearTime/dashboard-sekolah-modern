@@ -110,6 +110,7 @@ const ProgramList = ({ user, onBack, tipeProgram }: ProgramListProps) => {
           onView={handleView}
           onEdit={handleEdit}
           user={user}
+          tipeProgram={tipeProgram}
         />
 
         {!loading && programs.length > 0 && (

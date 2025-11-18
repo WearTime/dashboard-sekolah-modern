@@ -20,7 +20,7 @@ export const ekstrakulikulerSchema = z.object({
   imagesThumbnail: z
     .string()
     .regex(
-      /^\/uploads\/ekstrakulikuler\/[a-f0-9]{32}\.(jpg|jpeg|png|webp)$/i,
+      /^\/api\/files\/ekstrakulikuler\/[a-f0-9]{32}\.(jpg|jpeg|png|webp)$/i,
       "Format path image tidak valid"
     )
     .optional()
@@ -48,7 +48,7 @@ export const gallerySchema = z.object({
   imagePath: z
     .string()
     .regex(
-      /^\/uploads\/ekstrakulikuler\/gallery\/[a-f0-9]{32}\.(jpg|jpeg|png|webp)$/i,
+      /^\/api\/files\/ekstrakulikuler-gallery\/[a-f0-9]{32}\.(jpg|jpeg|png|webp)$/i,
       "Format path image tidak valid"
     ),
   caption: z.string().max(200, "Caption maksimal 200 karakter").optional(),

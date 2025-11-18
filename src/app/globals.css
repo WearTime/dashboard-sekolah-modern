@@ -53,8 +53,3 @@ a {
   background-color: #f59e0b;
   color: white;
 }
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-}

@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import { getCurrentUser } from "WT/lib/auth";
 import { hasPermission } from "WT/lib/permissions";
 import { ekstrakulikulerSchema } from "WT/validators/eskul.validator";
+import { ZodError } from "zod";
 
 const prisma = new PrismaClient();
 
@@ -115,13 +116,6 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  if (user.role !== "PRINCIPAL" && user.role !== "ADMIN") {
-    return NextResponse.json(
-      { success: false, message: "Forbidden" },
-      { status: 403 }
-    );
-  }
-
   try {
     const body = await request.json();
 
@@ -166,16 +160,13 @@ export async function POST(request: NextRequest) {
       message: "Data ekstrakulikuler berhasil ditambahkan",
       data: ekstrakulikuler,
     });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    console.error("Error creating ekstrakulikuler:", error);
-
-    if (error.name === "ZodError") {
+  } catch (error) {
+    if (error instanceof ZodError) {
       return NextResponse.json(
         {
           success: false,
-          message: "Validasi gagal",
-          errors: error.errors,
+          message: error.issues?.[0]?.message || "Validasi gagal",
+          errors: error.issues,
         },
         { status: 400 }
       );

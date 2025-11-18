@@ -3,6 +3,8 @@
 import { ProgramJurusan, Jurusan } from "WT/types/program";
 import styles from "../ProgramSlide/ProgramSlide.module.css";
 import Button from "WT/components/Ui/Button";
+import ProtectedComponent from "WT/components/Ui/ProtectedComponent";
+import { SessionUser } from "WT/types";
 
 interface SlideViewProps {
   programs: ProgramJurusan[];
@@ -15,6 +17,7 @@ interface SlideViewProps {
   onListClick: () => void;
   title: string;
   jurusan: Jurusan;
+  user: SessionUser | null | undefined;
 }
 
 const ProgramJurusanSlide = ({
@@ -27,17 +30,28 @@ const ProgramJurusanSlide = ({
   onAddClick,
   onListClick,
   title,
+  jurusan,
+  user,
 }: SlideViewProps) => {
+  const buildCreatePermission = () => {
+    const tipe = jurusan.kode.toLowerCase();
+    return `program.${tipe}.create`;
+  };
   if (loading) {
     return (
       <div className={styles.slideContainer}>
         <div className={styles.header}>
           <h5 className={styles.title}>{title}</h5>
           <div className={styles.headerActions}>
-            <Button className={styles.btnAdd} onClick={onAddClick}>
-              <i className="fas fa-plus"></i>
-              <span>Tambah</span>
-            </Button>
+            <ProtectedComponent
+              user={user}
+              permission={buildCreatePermission()}
+            >
+              <Button className={styles.btnAdd} onClick={onAddClick}>
+                <i className="fas fa-plus"></i>
+                <span>Tambah</span>
+              </Button>
+            </ProtectedComponent>
             <Button className={styles.btnList} onClick={onListClick}>
               <i className="fas fa-list"></i>
               <span>List</span>
@@ -58,10 +72,15 @@ const ProgramJurusanSlide = ({
         <div className={styles.header}>
           <h5 className={styles.title}>{title}</h5>
           <div className={styles.headerActions}>
-            <Button className={styles.btnAdd} onClick={onAddClick}>
-              <i className="fas fa-plus"></i>
-              <span>Tambah</span>
-            </Button>
+            <ProtectedComponent
+              user={user}
+              permission={buildCreatePermission()}
+            >
+              <Button className={styles.btnAdd} onClick={onAddClick}>
+                <i className="fas fa-plus"></i>
+                <span>Tambah</span>
+              </Button>
+            </ProtectedComponent>
             <Button className={styles.btnList} onClick={onListClick}>
               <i className="fas fa-list"></i>
               <span>List</span>
@@ -84,10 +103,12 @@ const ProgramJurusanSlide = ({
       <div className={styles.header}>
         <h5 className={styles.title}>{title}</h5>
         <div className={styles.headerActions}>
-          <Button className={styles.btnAdd} onClick={onAddClick}>
-            <i className="fas fa-plus"></i>
-            <span>Tambah</span>
-          </Button>
+          <ProtectedComponent user={user} permission={buildCreatePermission()}>
+            <Button className={styles.btnAdd} onClick={onAddClick}>
+              <i className="fas fa-plus"></i>
+              <span>Tambah</span>
+            </Button>
+          </ProtectedComponent>
           <Button className={styles.btnList} onClick={onListClick}>
             <i className="fas fa-list"></i>
             <span>List</span>

@@ -4,6 +4,7 @@ import { Ekstrakulikuler } from "WT/types/ekstrakulikuler";
 import styles from "./EkstrakulikulerTable.module.css";
 import { SessionUser } from "WT/types";
 import Button from "WT/components/Ui/Button";
+import ProtectedActionButtons from "WT/components/Ui/ProtectedActionButtons";
 
 interface EkstrakulikulerTableProps {
   ekstrakulikuler: Ekstrakulikuler[];
@@ -127,43 +128,42 @@ const EkstrakulikulerTable = ({
                 </div>
               </td>
               <td>
-                <div className={styles.actionButtons}>
-                  <Button
-                    className={`${styles.btnAction} ${styles.btnView}`}
-                    title="Lihat Detail"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onView(eskul);
-                    }}
-                  >
-                    <i className="fas fa-eye"></i>
-                  </Button>
-                  {user &&
-                    (user.role === "ADMIN" || user.role === "PRINCIPAL") && (
-                      <>
-                        <Button
-                          className={`${styles.btnAction} ${styles.btnEdit}`}
-                          title="Edit"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onEdit(eskul);
-                          }}
-                        >
-                          <i className="fas fa-edit"></i>
-                        </Button>
-                        <Button
-                          className={`${styles.btnAction} ${styles.btnDelete}`}
-                          title="Hapus"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onDelete(eskul.id, eskul.namaEskul);
-                          }}
-                        >
-                          <i className="fas fa-trash"></i>
-                        </Button>
-                      </>
-                    )}
-                </div>
+                <ProtectedActionButtons
+                  user={user}
+                  actions={[
+                    {
+                      icon: "fas fa-eye",
+                      title: "Lihat Detail",
+                      onClick: (e) => {
+                        e.stopPropagation();
+                        onView(eskul);
+                      },
+                      permission: "",
+                      variant: "view",
+                      needPermission: false,
+                    },
+                    {
+                      icon: "fas fa-edit",
+                      title: "Edit",
+                      onClick: (e) => {
+                        e.stopPropagation();
+                        onEdit(eskul);
+                      },
+                      permission: "ekstrakulikuler.edit",
+                      variant: "edit",
+                    },
+                    {
+                      icon: "fas fa-trash",
+                      title: "Hapus",
+                      onClick: (e) => {
+                        e.stopPropagation();
+                        onDelete(eskul.id, eskul.namaEskul);
+                      },
+                      permission: "ekstrakulikuler.delete",
+                      variant: "delete",
+                    },
+                  ]}
+                />
               </td>
             </tr>
           ))}

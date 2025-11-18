@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
     const randomName = crypto.randomBytes(16).toString("hex");
     const fileName = `${randomName}${fileExtension}`;
 
-    const uploadDir = path.join(process.cwd(), "public", "uploads", "program");
+    const uploadDir = path.join(process.cwd(), "uploads", "program");
     const filePath = path.join(uploadDir, fileName);
 
     if (!existsSync(uploadDir)) {
@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(bytes);
     await writeFile(filePath, buffer);
 
-    const relativePath = `/uploads/program/${fileName}`;
+    const relativePath = `/api/files/program/${fileName}`;
 
     return NextResponse.json({
       success: true,

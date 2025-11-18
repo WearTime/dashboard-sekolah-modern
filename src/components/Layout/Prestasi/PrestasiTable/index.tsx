@@ -4,6 +4,7 @@ import { Prestasi } from "WT/types/prestasi";
 import styles from "./PrestasiTable.module.css";
 import { SessionUser } from "WT/types";
 import Button from "WT/components/Ui/Button";
+import ProtectedActionButtons from "WT/components/Ui/ProtectedActionButtons";
 
 interface PrestasiTableProps {
   prestasi: Prestasi[];
@@ -46,64 +47,6 @@ const PrestasiTable = ({
       if (value === "Internasional") return styles.badgeInternasional;
     }
     return "";
-  };
-
-  const canEditDelete = (item: Prestasi): boolean => {
-    if (!user || !user.permissions) return false;
-
-    let permissionPrefix = "";
-    const levelLower = item.level.toLowerCase();
-
-    if (item.recipient_type === "Siswa") {
-      permissionPrefix = `prestasi.siswa.${levelLower}`;
-    } else if (item.recipient_type === "Sekolah") {
-      permissionPrefix = `prestasi.sekolah.${levelLower}`;
-    } else if (item.recipient_type === "GTK") {
-      permissionPrefix = `prestasi.gtk.${levelLower}`;
-    }
-
-    const hasEditPermission = user.permissions.includes(
-      `${permissionPrefix}.edit`
-    );
-    const hasDeletePermission = user.permissions.includes(
-      `${permissionPrefix}.delete`
-    );
-
-    return hasEditPermission || hasDeletePermission;
-  };
-
-  const canEdit = (item: Prestasi): boolean => {
-    if (!user || !user.permissions) return false;
-
-    let permissionName = "";
-    const levelLower = item.level.toLowerCase();
-
-    if (item.recipient_type === "Siswa") {
-      permissionName = `prestasi.siswa.${levelLower}.edit`;
-    } else if (item.recipient_type === "Sekolah") {
-      permissionName = `prestasi.sekolah.${levelLower}.edit`;
-    } else if (item.recipient_type === "GTK") {
-      permissionName = `prestasi.gtk.${levelLower}.edit`;
-    }
-
-    return user.permissions.includes(permissionName);
-  };
-
-  const canDelete = (item: Prestasi): boolean => {
-    if (!user || !user.permissions) return false;
-
-    let permissionName = "";
-    const levelLower = item.level.toLowerCase();
-
-    if (item.recipient_type === "Siswa") {
-      permissionName = `prestasi.siswa.${levelLower}.delete`;
-    } else if (item.recipient_type === "Sekolah") {
-      permissionName = `prestasi.sekolah.${levelLower}.delete`;
-    } else if (item.recipient_type === "GTK") {
-      permissionName = `prestasi.gtk.${levelLower}.delete`;
-    }
-
-    return user.permissions.includes(permissionName);
   };
 
   if (loading) {
@@ -229,46 +172,42 @@ const PrestasiTable = ({
               </td>
               <td>{formatDate(item.tanggal)}</td>
               <td>
-                <div className={styles.actionButtons}>
-                  <Button
-                    className={`${styles.btnAction} ${styles.btnView}`}
-                    title="Lihat Detail"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onView(item);
-                    }}
-                  >
-                    <i className="fas fa-eye"></i>
-                  </Button>
-                  {user && canEditDelete(item) && (
-                    <>
-                      {canEdit(item) && (
-                        <Button
-                          className={`${styles.btnAction} ${styles.btnEdit}`}
-                          title="Edit"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onEdit(item);
-                          }}
-                        >
-                          <i className="fas fa-edit"></i>
-                        </Button>
-                      )}
-                      {canDelete(item) && (
-                        <Button
-                          className={`${styles.btnAction} ${styles.btnDelete}`}
-                          title="Hapus"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onDelete(item.id, item.name);
-                          }}
-                        >
-                          <i className="fas fa-trash"></i>
-                        </Button>
-                      )}
-                    </>
-                  )}
-                </div>
+                <ProtectedActionButtons
+                  user={user}
+                  actions={[
+                    {
+                      icon: "fas fa-eye",
+                      title: "Lihat Detail",
+                      onClick: (e) => {
+                        e.stopPropagation();
+                        onView(item);
+                      },
+                      permission: "",
+                      variant: "view",
+                      needPermission: false,
+                    },
+                    {
+                      icon: "fas fa-edit",
+                      title: "Edit",
+                      onClick: (e) => {
+                        e.stopPropagation();
+                        onEdit(item);
+                      },
+                      permission: `prestasi.${item.recipient_type.toLowerCase()}.${item.level.toLowerCase()}.edit`,
+                      variant: "edit",
+                    },
+                    {
+                      icon: "fas fa-trash",
+                      title: "Hapus",
+                      onClick: (e) => {
+                        e.stopPropagation();
+                        onDelete(item.id, item.name);
+                      },
+                      permission: `prestasi.${item.recipient_type.toLowerCase()}.${item.level.toLowerCase()}.delete`,
+                      variant: "delete",
+                    },
+                  ]}
+                />
               </td>
             </tr>
           ))}

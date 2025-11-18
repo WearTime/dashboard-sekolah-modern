@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { getCurrentUser } from "WT/lib/auth";
 import { hasPermission } from "WT/lib/permissions";
+import { ZodError } from "zod";
 
 const prisma = new PrismaClient();
 
@@ -98,18 +99,6 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  if (user.role != "PRINCIPAL" && user.role != "ADMIN") {
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Forbidden",
-      },
-      {
-        status: 403,
-      }
-    );
-  }
-
   try {
     const body = await request.json();
     const { guru_nips, ...mapelData } = body;
@@ -162,6 +151,16 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error("Error creating mapel:", error);
+    if (error instanceof ZodError) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: error.issues?.[0]?.message || "Validasi gagal",
+          errors: error.issues,
+        },
+        { status: 400 }
+      );
+    }
     return NextResponse.json(
       { success: false, message: "Gagal menambahkan data mapel" },
       { status: 500 }

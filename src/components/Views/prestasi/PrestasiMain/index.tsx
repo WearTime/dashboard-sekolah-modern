@@ -86,6 +86,7 @@ const PrestasiMain = ({ user, prestasiType, level }: PrestasiMainProps) => {
       onListClick={handleListClick}
       prestasiType={prestasiType}
       level={level}
+      user={user}
     />
   );
 };

@@ -44,7 +44,7 @@ export const siswaSchema = z.object({
   image: z
     .string()
     .regex(
-      /^\/uploads\/siswa\/[a-f0-9]{32}\.(jpg|jpeg|png|webp)$/i,
+      /^\/api\/files\/siswa\/[a-f0-9]{32}\.(jpg|jpeg|png|webp)$/i,
       "Format path image tidak valid"
     )
     .optional()

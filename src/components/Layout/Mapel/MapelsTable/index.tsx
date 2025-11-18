@@ -4,6 +4,7 @@ import { Mapel } from "WT/types/mapel";
 import styles from "./MapelsTable.module.css";
 import { SessionUser } from "WT/types";
 import Button from "WT/components/Ui/Button";
+import ProtectedActionButtons from "WT/components/Ui/ProtectedActionButtons";
 
 interface MapelTableProps {
   mapel: Mapel[];
@@ -130,43 +131,42 @@ const MapelTable = ({
               </td>
               <td>{item.jurusan || "Semua"}</td>
               <td>
-                <div className={styles.actionButtons}>
-                  <Button
-                    className={`${styles.btnAction} ${styles.btnView}`}
-                    title="Lihat Detail"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onView(item);
-                    }}
-                  >
-                    <i className="fas fa-eye"></i>
-                  </Button>
-                  {user &&
-                    (user.role === "ADMIN" || user?.role === "PRINCIPAL") && (
-                      <>
-                        <Button
-                          className={`${styles.btnAction} ${styles.btnEdit}`}
-                          title="Edit"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onEdit(item);
-                          }}
-                        >
-                          <i className="fas fa-edit"></i>
-                        </Button>
-                        <Button
-                          className={`${styles.btnAction} ${styles.btnDelete}`}
-                          title="Hapus"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onDelete(item.kode_mapel, item.nama_mapel);
-                          }}
-                        >
-                          <i className="fas fa-trash"></i>
-                        </Button>
-                      </>
-                    )}
-                </div>
+                <ProtectedActionButtons
+                  user={user}
+                  actions={[
+                    {
+                      icon: "fas fa-eye",
+                      title: "Lihat Detail",
+                      onClick: (e) => {
+                        e.stopPropagation();
+                        onView(item);
+                      },
+                      permission: "",
+                      variant: "view",
+                      needPermission: false,
+                    },
+                    {
+                      icon: "fas fa-edit",
+                      title: "Edit",
+                      onClick: (e) => {
+                        e.stopPropagation();
+                        onEdit(item);
+                      },
+                      permission: "guru.edit",
+                      variant: "edit",
+                    },
+                    {
+                      icon: "fas fa-trash",
+                      title: "Hapus",
+                      onClick: (e) => {
+                        e.stopPropagation();
+                        onDelete(item.kode_mapel, item.nama_mapel);
+                      },
+                      permission: "guru.delete",
+                      variant: "delete",
+                    },
+                  ]}
+                />
               </td>
             </tr>
           ))}

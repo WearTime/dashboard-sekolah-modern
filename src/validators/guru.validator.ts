@@ -31,7 +31,7 @@ export const guruSchema = z
     image: z
       .string()
       .regex(
-        /^\/uploads\/guru\/[a-f0-9]{32}\.(jpg|jpeg|png|webp)$/i,
+        /^\/api\/files\/guru\/[a-f0-9]{32}\.(jpg|jpeg|png|webp)$/i,
         "Format path image tidak valid"
       )
       .optional()
@@ -43,7 +43,7 @@ export const guruSchema = z
       if (!/^(I|II|III|IV)\/(a|b|c|d)$/.test(golongan)) {
         ctx.addIssue({
           path: ["golongan"],
-          code: z.ZodIssueCode.custom,
+          code: "custom",
           message: "Format golongan tidak valid untuk ASN",
         });
       }
@@ -53,7 +53,7 @@ export const guruSchema = z
       if (!/^[1-9]$/.test(golongan)) {
         ctx.addIssue({
           path: ["golongan"],
-          code: z.ZodIssueCode.custom,
+          code: "custom",
           message: "Format golongan tidak valid untuk P3K",
         });
       }

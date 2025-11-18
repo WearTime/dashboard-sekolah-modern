@@ -34,7 +34,7 @@ export const prestasiSchema = z.object({
   image: z
     .string()
     .regex(
-      /^\/uploads\/prestasi\/[a-f0-9]{32}\.(jpg|jpeg|png|webp)$/i,
+      /^\/api\/files\/prestasi\/[a-f0-9]{32}\.(jpg|jpeg|png|webp)$/i,
       "Format path image tidak valid"
     )
     .optional()

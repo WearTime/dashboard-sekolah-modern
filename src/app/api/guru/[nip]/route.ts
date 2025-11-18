@@ -69,19 +69,6 @@ export async function PUT(
       { status: 403 }
     );
   }
-
-  if (user.role != "PRINCIPAL" && user.role != "ADMIN") {
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Forbidden",
-      },
-      {
-        status: 403,
-      }
-    );
-  }
-
   try {
     const body = await request.json();
     const { mapel_ids, ...guruData } = body;

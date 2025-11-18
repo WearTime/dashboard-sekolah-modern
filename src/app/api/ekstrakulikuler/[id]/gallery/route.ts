@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import { getCurrentUser } from "WT/lib/auth";
 import { hasPermission } from "WT/lib/permissions";
 import { gallerySchema } from "WT/validators/eskul.validator";
+import { ZodError } from "zod";
 
 const prisma = new PrismaClient();
 
@@ -28,7 +29,8 @@ export async function GET(
       data: serializedGalleries,
     });
   } catch (error) {
-    console.error("Error fetching galleries:", error);
+    console.error("Error fetching ekstrakulikuler gallery:", error);
+
     return NextResponse.json(
       { success: false, message: "Gagal mengambil data galeri" },
       { status: 500 }
@@ -53,13 +55,6 @@ export async function POST(
   const userPermis = await hasPermission(user.id, "ekstrakulikuler.edit");
 
   if (!userPermis) {
-    return NextResponse.json(
-      { success: false, message: "Forbidden" },
-      { status: 403 }
-    );
-  }
-
-  if (user.role !== "PRINCIPAL" && user.role !== "ADMIN") {
     return NextResponse.json(
       { success: false, message: "Forbidden" },
       { status: 403 }
@@ -96,16 +91,13 @@ export async function POST(
       message: "Foto galeri berhasil ditambahkan",
       data: gallery,
     });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    console.error("Error adding gallery:", error);
-
-    if (error.name === "ZodError") {
+  } catch (error) {
+    if (error instanceof ZodError) {
       return NextResponse.json(
         {
           success: false,
-          message: "Validasi gagal",
-          errors: error.errors,
+          message: error.issues?.[0]?.message || "Validasi gagal",
+          errors: error.issues,
         },
         { status: 400 }
       );

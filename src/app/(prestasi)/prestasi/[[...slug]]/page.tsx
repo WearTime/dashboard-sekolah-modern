@@ -130,7 +130,7 @@ export default async function PrestasiPage({
       ) {
         permissionName = `prestasi.gtk.${recipient_level}.create`;
       } else {
-        forbidden();
+        permissionName = "prestasi.gtk.create";
       }
     } else {
       forbidden();
