@@ -38,7 +38,7 @@ export const siswaSchema = z.object({
     }, "Usia siswa harus antara 13-20 tahun"),
   alamat: z
     .string()
-    .min(10, "Alamat minimal 10 karakter")
+    .min(1, "Alamat minimal 1 karakter")
     .optional()
     .or(z.literal("")),
   image: z

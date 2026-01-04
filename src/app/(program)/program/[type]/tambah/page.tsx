@@ -3,7 +3,10 @@ import MainLayout from "WT/components/Layout/Main";
 import TambahProgram from "WT/components/Views/program/ProgramAdd";
 import { getCurrentUser } from "WT/lib/auth";
 import { hasPermission } from "WT/lib/permissions";
-import { getProgramConfigByPath, PROGRAM_CONFIGS } from "WT/config/program";
+import {
+  getProgramConfigByPath,
+  PROGRAM_CONFIGS,
+} from "WT/config/program.config";
 
 interface PageProps {
   params: Promise<{ type: string }>;

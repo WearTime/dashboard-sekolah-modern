@@ -147,7 +147,6 @@
   border-radius: 6px;
   font-size: 13px;
   color: black;
-  max-width: 200px;
 }
 
 .tag span {
@@ -158,7 +157,7 @@
 
 .tagRemove {
   display: flex;
-  align-items: center;
+  /* align-items: center; */
   justify-content: center;
   width: 16px;
   height: 16px;

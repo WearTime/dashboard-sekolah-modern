@@ -37,6 +37,7 @@
   align-items: center;
   gap: 8px;
   text-decoration: none;
+  border: 0;
 }
 
 .importBtn:hover {

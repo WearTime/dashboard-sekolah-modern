@@ -2,7 +2,10 @@ import { notFound } from "next/navigation";
 import MainLayout from "WT/components/Layout/Main";
 import ProgramMain from "WT/components/Views/program/ProgramMain";
 import { getCurrentUser } from "WT/lib/auth";
-import { getProgramConfigByPath, PROGRAM_CONFIGS } from "WT/config/program";
+import {
+  getProgramConfigByPath,
+  PROGRAM_CONFIGS,
+} from "WT/config/program.config";
 
 interface PageProps {
   params: Promise<{ type: string }>;

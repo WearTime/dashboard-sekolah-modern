@@ -196,9 +196,6 @@ export default function TambahMapel() {
             <h5 className={styles.cardTitle}>
               Form Tambah Mata Pelajaran Baru
             </h5>
-            <a href="#" className={styles.importBtn}>
-              <span>Import</span>
-            </a>
           </div>
 
           <form onSubmit={handleSubmit} className={styles.mapelForm}>

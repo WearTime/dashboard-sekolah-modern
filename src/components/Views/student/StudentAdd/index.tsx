@@ -7,6 +7,7 @@ import styles from "./StudentAdd.module.css";
 import Button from "WT/components/Ui/Button";
 import { useUnsavedChanges } from "WT/hooks/useUnsavedChanges";
 import ConfirmationModal from "WT/components/Layout/ConfirmationModal";
+import ImportModal from "WT/components/Layout/ImportModal";
 
 interface StudentFormData {
   nisn: string;
@@ -37,6 +38,7 @@ export default function TambahSiswa() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [importModalOpen, setImportModalOpen] = useState(false);
   const [photoPreview, setPhotoPreview] = useState<string>("");
   const [uploadedImagePath, setUploadedImagePath] = useState<string>("");
   const [formData, setFormData] = useState<StudentFormData>(initialFormData);
@@ -93,6 +95,10 @@ export default function TambahSiswa() {
       pendingNavigationResolve(false);
       setPendingNavigationResolve(null);
     }
+  };
+
+  const handleImportSuccess = () => {
+    toast.success("Berhasil mengimport data dari excel!");
   };
 
   useUnsavedChanges({
@@ -269,9 +275,12 @@ export default function TambahSiswa() {
         <div className={styles.cardContainer}>
           <div className={styles.cardHeader}>
             <h5 className={styles.cardTitle}>Form Tambah Siswa Baru</h5>
-            <a href="#" className={styles.importBtn}>
+            <Button
+              className={styles.importBtn}
+              onClick={() => setImportModalOpen(true)}
+            >
               <span>Import</span>
-            </a>
+            </Button>
           </div>
 
           <form onSubmit={handleSubmit} className={styles.studentForm}>
@@ -551,6 +560,14 @@ export default function TambahSiswa() {
         confirmText="Ya, Tinggalkan"
         cancelText="Tetap di Halaman"
         confirmButtonStyle="danger"
+      />
+
+      <ImportModal
+        isOpen={importModalOpen}
+        onClose={() => setImportModalOpen(false)}
+        entityType="siswa"
+        entityLabel="Siswa"
+        onSuccess={handleImportSuccess}
       />
     </>
   );

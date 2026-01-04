@@ -8,6 +8,7 @@ import Button from "WT/components/Ui/Button";
 import { useUnsavedChanges } from "WT/hooks/useUnsavedChanges";
 import ConfirmationModal from "WT/components/Layout/ConfirmationModal";
 import { useTeachers } from "WT/hooks/useTeacher";
+import ImportModal from "WT/components/Layout/ImportModal";
 
 interface TeacherFormData {
   nip: string;
@@ -40,7 +41,7 @@ export default function TambahGuru() {
   const [uploadedImagePath, setUploadedImagePath] = useState<string>("");
   const [formData, setFormData] = useState<TeacherFormData>(initialFormData);
   const [hasChanges, setHasChanges] = useState(false);
-
+  const [importModalOpen, setImportModalOpen] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [showNavigateModal, setShowNavigateModal] = useState(false);
   const [pendingNavigationResolve, setPendingNavigationResolve] = useState<
@@ -175,6 +176,10 @@ export default function TambahGuru() {
     return availableMapel
       .filter((mapel) => formData.mapel_ids.includes(mapel.kode_mapel))
       .map((mapel) => mapel.nama_mapel);
+  };
+
+  const handleImportSuccess = () => {
+    toast.success("Berhasil mengimport data dari excel!");
   };
 
   const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -339,9 +344,12 @@ export default function TambahGuru() {
         <div className={styles.cardContainer}>
           <div className={styles.cardHeader}>
             <h5 className={styles.cardTitle}>Form Tambah Guru Baru</h5>
-            <a href="#" className={styles.importBtn}>
+            <Button
+              className={styles.importBtn}
+              onClick={() => setImportModalOpen(true)}
+            >
               <span>Import</span>
-            </a>
+            </Button>
           </div>
 
           <form onSubmit={handleSubmit} className={styles.teacherForm}>
@@ -685,6 +693,14 @@ export default function TambahGuru() {
         confirmText="Ya, Tinggalkan"
         cancelText="Tetap di Halaman"
         confirmButtonStyle="danger"
+      />
+
+      <ImportModal
+        isOpen={importModalOpen}
+        onClose={() => setImportModalOpen(false)}
+        entityType="guru"
+        entityLabel="Guru"
+        onSuccess={handleImportSuccess}
       />
     </>
   );
