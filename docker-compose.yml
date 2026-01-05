@@ -1,0 +1,16 @@
+version: "WT2026.2.5.0"
+
+services:
+  dashboard:
+    container_name: dashboard-skanpat
+    build:
+      context: .
+      dockerfile: DockerFile
+    restart: unless-stopped
+
+    ports:
+      - "127.0.0.1:4100:3000"
+
+    environment:
+      NODE_ENV: production
+      PORT: 3000

@@ -1,6 +1,6 @@
 {
   "name": "rumah-sekolah-modern",
-  "version": "0.1.0",
+  "version": "WT2026.2.5.0",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
